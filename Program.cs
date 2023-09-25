@@ -80,6 +80,12 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+app.UseCors(options => options
+                .WithOrigins(new[] { "http://localhost:3000", "http://localhost:5173" })
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+            );
 
 app.MapControllers();
 

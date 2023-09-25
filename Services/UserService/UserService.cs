@@ -110,7 +110,7 @@ namespace PetShop.Services.UserService
                 }
                 var token = GetToken(authClaims);
 
-                var data = new { token = new JwtSecurityTokenHandler().WriteToken(token), expiration = token.ValidTo, id = user.Id, email = user.Email };
+                var data = new { token = new JwtSecurityTokenHandler().WriteToken(token), expiration = token.ValidTo, id = user.Id, email = user.Email, username = user.UserName };
                 return ResponseHelper.Ok(data);
             }
             return ResponseHelper.Unauthorized();

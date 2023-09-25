@@ -22,7 +22,7 @@
 | :-- | :------- | :---------------- | :------------------------------- | :--------------------- |
 | 1   | 21522211 | Phạm Duy Khánh    | https://github.com/DiiKhanh      | 21522211@gm.uit.edu.vn |
 | 2   | 21521230 | Ngô Thùy Yến Nhi  | https://github.com/ngothuyyennhi | 21521230@gm.uit.edu.vn |
-| 3   | 21522317 | Võ Thị Bích Ly    |                                  | 21522317@gm.uit.edu.vn |
+| 3   | 21522317 | Võ Thị Bích Ly    |https://github.com/bleenee203     | 21522317@gm.uit.edu.vn |
 | 4   | 21522351 | Nguyễn Ngọc Hà My | https://github.com/mietheweirdo  | 21522351@gm.uit.edu.vn |
 
 ## How to run locally:
