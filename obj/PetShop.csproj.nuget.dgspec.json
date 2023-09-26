@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\learn-fullstack\\pet-shop\\backend\\PetShop\\PetShop.csproj": {}
+    "C:\\Users\\yennh\\Source\\Repos\\IS220.O11-PetShop\\PetShop.csproj": {}
   },
   "projects": {
-    "D:\\learn-fullstack\\pet-shop\\backend\\PetShop\\PetShop.csproj": {
+    "C:\\Users\\yennh\\Source\\Repos\\IS220.O11-PetShop\\PetShop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\learn-fullstack\\pet-shop\\backend\\PetShop\\PetShop.csproj",
+        "projectUniqueName": "C:\\Users\\yennh\\Source\\Repos\\IS220.O11-PetShop\\PetShop.csproj",
         "projectName": "PetShop",
-        "projectPath": "D:\\learn-fullstack\\pet-shop\\backend\\PetShop\\PetShop.csproj",
-        "packagesPath": "C:\\Users\\tento\\.nuget\\packages\\",
-        "outputPath": "D:\\learn-fullstack\\pet-shop\\backend\\PetShop\\obj\\",
+        "projectPath": "C:\\Users\\yennh\\Source\\Repos\\IS220.O11-PetShop\\PetShop.csproj",
+        "packagesPath": "C:\\Users\\yennh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\yennh\\Source\\Repos\\IS220.O11-PetShop\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\tento\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\yennh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -94,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
