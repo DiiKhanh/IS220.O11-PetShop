@@ -8,7 +8,7 @@ namespace PetShop.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? CartDetailId { get; set; }
-        public int? CartId { get; set; }
+        public string? CartId { get; set; }
         public int? ProductItemId { get; set; }
         public int? DogItemId { get; set; }
         public short Quantity { get; set; }

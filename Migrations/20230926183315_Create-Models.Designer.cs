@@ -12,7 +12,7 @@ using PetShop.Data;
 namespace PetShop.Migrations
 {
     [DbContext(typeof(PetShopDbContext))]
-    [Migration("20230926164801_Create-Models")]
+    [Migration("20230926183315_Create-Models")]
     partial class CreateModels
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -324,11 +324,8 @@ namespace PetShop.Migrations
 
             modelBuilder.Entity("PetShop.Models.Cart", b =>
                 {
-                    b.Property<int?>("CartId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("CartId"), 1L, 1);
+                    b.Property<string>("CartId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("Total")
                         .HasColumnType("int");
@@ -346,8 +343,8 @@ namespace PetShop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("CartDetailId"), 1L, 1);
 
-                    b.Property<int?>("CartId")
-                        .HasColumnType("int");
+                    b.Property<string>("CartId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("DogItemId")
                         .HasColumnType("int");
@@ -581,11 +578,7 @@ namespace PetShop.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
-                        .IsRequired()
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("OrderId");
@@ -593,7 +586,7 @@ namespace PetShop.Migrations
                     b.HasIndex("ShipInfoId")
                         .IsUnique();
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Order");
                 });
@@ -786,9 +779,7 @@ namespace PetShop.Migrations
 
                     b.HasOne("PetShop.Data.ApplicationUser", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("ShipInfo");
 

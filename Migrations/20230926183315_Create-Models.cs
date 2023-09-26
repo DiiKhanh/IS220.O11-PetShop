@@ -13,8 +13,7 @@ namespace PetShop.Migrations
                 name: "Cart",
                 columns: table => new
                 {
-                    CartId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CartId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Total = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -75,7 +74,7 @@ namespace PetShop.Migrations
                 {
                     CartDetailId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CartId = table.Column<int>(type: "int", nullable: true),
+                    CartId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ProductItemId = table.Column<int>(type: "int", nullable: true),
                     DogItemId = table.Column<int>(type: "int", nullable: true),
                     Quantity = table.Column<short>(type: "smallint", nullable: false)
@@ -155,13 +154,12 @@ namespace PetShop.Migrations
                 {
                     OrderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Total = table.Column<int>(type: "int", nullable: false),
                     ShipInfoId = table.Column<int>(type: "int", nullable: false),
                     OrderStatus = table.Column<int>(type: "int", nullable: true),
                     ShipmentStatus = table.Column<int>(type: "int", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: true),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -169,11 +167,10 @@ namespace PetShop.Migrations
                 {
                     table.PrimaryKey("PK_Order", x => x.OrderId);
                     table.ForeignKey(
-                        name: "FK_Order_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Order_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Order_ShipInfo_ShipInfoId",
                         column: x => x.ShipInfoId,
@@ -308,9 +305,9 @@ namespace PetShop.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_UserId1",
+                name: "IX_Order_UserId",
                 table: "Order",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetail_DogItemId",

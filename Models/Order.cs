@@ -12,7 +12,7 @@ namespace PetShop.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? OrderId { get; set; }
-        public int? UserId { get; set; }
+        public string? UserId { get; set; }
         public int Total { get; set; }
 
         public int ShipInfoId { get; set; }
