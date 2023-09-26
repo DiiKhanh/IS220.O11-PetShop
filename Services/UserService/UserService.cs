@@ -110,7 +110,11 @@ namespace PetShop.Services.UserService
                 }
                 var token = GetToken(authClaims);
 
-                var data = new { token = new JwtSecurityTokenHandler().WriteToken(token), expiration = token.ValidTo, id = user.Id, email = user.Email, username = user.UserName };
+                var data = new { token = new JwtSecurityTokenHandler().WriteToken(token), expiration = token.ValidTo, id = user.Id, email = user.Email, username = user.UserName,
+                    firstName = user.FirstName,
+                    lastName = user.LastName,
+                    phoneNumber = user.PhoneNumber,
+                };
                 return ResponseHelper.Ok(data);
             }
             return ResponseHelper.Unauthorized();
@@ -280,6 +284,23 @@ namespace PetShop.Services.UserService
         };
 
             return mail;
+        }
+
+        public async Task<IActionResult> GetInfo(string userEmail)
+        {
+            var user = await userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                return ResponseHelper.Unauthorized();
+            }
+            return ResponseHelper.Ok(new
+            {
+                username = user.UserName,
+                email = user.Email,
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                phoneNumber = user.PhoneNumber,
+            });
         }
     }
 }

@@ -83,13 +83,36 @@ namespace PetShop.Controllers
                     // Sử dụng giá trị subject ở đây
                     return await _userService.ChangePasswordAsync(model, userEmail);
                 }
-
-                // ...
             }
-           
              return ResponseHelper.BadRequest("user email null");
-           
-            
         }
+        [Authorize]
+        [HttpGet("info")]
+        public async Task<IActionResult> GetInfo()
+        {
+            string authHeader = HttpContext.Request.Headers["Authorization"];
+            if (authHeader != null && authHeader.StartsWith("Bearer "))
+            {
+                string token = authHeader.Substring("Bearer ".Length).Trim();
+
+                // Sử dụng JwtSecurityTokenHandler để đọc token
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var tokenObj = tokenHandler.ReadJwtToken(token);
+
+                // Lấy các claim từ token
+                var claims = tokenObj.Claims;
+
+                // Ví dụ: Lấy giá trị claim "sub" (Subject)
+                var subClaim = claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email);
+                if (subClaim != null)
+                {
+                    string userEmail = subClaim.Value;
+                    // Sử dụng giá trị subject ở đây
+                    return await _userService.GetInfo(userEmail);
+                }
+            }
+            return ResponseHelper.Error();
+        }
+
     }
 }
