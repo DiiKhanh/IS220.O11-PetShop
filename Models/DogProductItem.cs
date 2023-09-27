@@ -20,7 +20,7 @@ namespace PetShop.Models
 
         public ICollection<OrderDetail> orderDetails { get; set; } = new List<OrderDetail>();
 
-        public List<CartDetail> cartDetails { get; } = new();
+        public ICollection<CartDetail> cartDetails { get; set; } 
 
 
     }

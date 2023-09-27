@@ -12,8 +12,8 @@ using PetShop.Data;
 namespace PetShop.Migrations
 {
     [DbContext(typeof(PetShopDbContext))]
-    [Migration("20230926183854_Create-Models")]
-    partial class CreateModels
+    [Migration("20230927100254_create-model")]
+    partial class createmodel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,24 +24,34 @@ namespace PetShop.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("DogItemInventory", b =>
+            modelBuilder.Entity("CartDetailDogItem", b =>
                 {
-                    b.Property<int>("CartDetailId")
+                    b.Property<int>("cartDetailsCartDetailId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DogProductItemId")
+                    b.Property<int>("dogItemsDogItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DogItemId")
+                    b.HasKey("cartDetailsCartDetailId", "dogItemsDogItemId");
+
+                    b.HasIndex("dogItemsDogItemId");
+
+                    b.ToTable("CartDetailDogItem");
+                });
+
+            modelBuilder.Entity("CartDetailDogProductItem", b =>
+                {
+                    b.Property<int>("cartDetailsCartDetailId")
                         .HasColumnType("int");
 
-                    b.HasKey("CartDetailId", "DogProductItemId");
+                    b.Property<int>("dogProductItemsDogProductItemId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("DogItemId");
+                    b.HasKey("cartDetailsCartDetailId", "dogProductItemsDogProductItemId");
 
-                    b.HasIndex("DogProductItemId");
+                    b.HasIndex("dogProductItemsDogProductItemId");
 
-                    b.ToTable("DogItemInventory");
+                    b.ToTable("CartDetailDogProductItem");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -659,23 +669,32 @@ namespace PetShop.Migrations
                     b.ToTable("ShipInfo");
                 });
 
-            modelBuilder.Entity("DogItemInventory", b =>
+            modelBuilder.Entity("CartDetailDogItem", b =>
                 {
                     b.HasOne("PetShop.Models.CartDetail", null)
                         .WithMany()
-                        .HasForeignKey("CartDetailId")
+                        .HasForeignKey("cartDetailsCartDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PetShop.Models.DogItem", null)
                         .WithMany()
-                        .HasForeignKey("DogItemId")
+                        .HasForeignKey("dogItemsDogItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CartDetailDogProductItem", b =>
+                {
+                    b.HasOne("PetShop.Models.CartDetail", null)
+                        .WithMany()
+                        .HasForeignKey("cartDetailsCartDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PetShop.Models.DogProductItem", null)
                         .WithMany()
-                        .HasForeignKey("DogProductItemId")
+                        .HasForeignKey("dogProductItemsDogProductItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

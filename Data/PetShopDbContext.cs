@@ -9,6 +9,16 @@ namespace PetShop.Data
 {
     public class PetShopDbContext: IdentityDbContext<ApplicationUser>
     {
+        public DbSet<Cart> Cart { get; set; }
+        public DbSet<CartDetail> CartDetail { get; set; }
+        public DbSet<DogItem> DogItem { get; set; }
+        public DbSet<DogProductItem> DogProductItem { get; set; }
+        public DbSet<DogProductType> DogProductType { get; set; }
+        public DbSet<DogSpecies> DogSpecies { get; set; }
+        public DbSet<Invoice> Invoice { get; set; }
+        public DbSet<Order> Order { get; set; }
+        public DbSet<OrderDetail> OrderDetail { get; set; }
+        public DbSet<ShipInfo> ShipInfo { get; set; }
         public PetShopDbContext(DbContextOptions<PetShopDbContext> options) : base(options)
         {
 
@@ -22,23 +32,7 @@ namespace PetShop.Data
             }
             );
 
-            builder.Entity<DogItem>()
-                   .HasMany(e => e.cartDetails)
-                   .WithMany(e => e.dogItems)
-                   .UsingEntity(
-                        "DogItemInventory",
-                        l => l.HasOne(typeof(CartDetail)).WithMany().HasForeignKey("CartDetailId").HasPrincipalKey(nameof(CartDetail.CartDetailId)),
-                        r => r.HasOne(typeof(DogItem)).WithMany().HasForeignKey("DogItemId").HasPrincipalKey(nameof(DogItem.DogItemId)),
-                        j => j.HasKey("CartDetailId", "DogItemId"));
-
-            builder.Entity<DogProductItem>()
-                   .HasMany(e => e.cartDetails)
-                   .WithMany(e => e.dogProductItems)
-                   .UsingEntity(
-                        "DogItemInventory",
-                        l => l.HasOne(typeof(CartDetail)).WithMany().HasForeignKey("CartDetailId").HasPrincipalKey(nameof(CartDetail.CartDetailId)),
-                        r => r.HasOne(typeof(DogProductItem)).WithMany().HasForeignKey("DogProductItemId").HasPrincipalKey(nameof(DogProductItem.DogProductItemId)),
-                        j => j.HasKey("CartDetailId", "DogProductItemId"));
+                 
         }
     }
 }
