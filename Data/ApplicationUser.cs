@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using PetShop.Models;
 
 namespace PetShop.Data
 {
@@ -15,5 +16,7 @@ namespace PetShop.Data
         public DateTime? VerifiedAt { get; set; }
         public string? PasswordResetToken { get; set; }
         public DateTime? ResetTokenExpires { get; set; }
+
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }
