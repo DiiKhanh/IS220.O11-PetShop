@@ -16,8 +16,10 @@ namespace PetShop.Models
 
         public Cart Cart { get; set; } = null!;
 
-        public List<DogItem> dogItems  { get; } = new();
-        public List<DogProductItem> dogProductItems { get; } = new();
+        //public List<DogItem> dogItems  { get; } = new();
+        //public List<DogProductItem> dogProductItems { get; } = new();
+
+        public List<Inventory> inventories { get; } = new();
 
     }
 }

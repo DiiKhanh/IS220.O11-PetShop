@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PetShop.Migrations
 {
-    public partial class CreateModels : Migration
+    public partial class createmodel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,6 +51,20 @@ namespace PetShop.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DogSpecies", x => x.DogSpeciesId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Inventory",
+                columns: table => new
+                {
+                    InventoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DogItemId = table.Column<int>(type: "int", nullable: false),
+                    DogProductItemId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Inventory", x => x.InventoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -180,22 +194,63 @@ namespace PetShop.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DogItemInventory",
+                name: "CartDetailInventory",
                 columns: table => new
                 {
-                    CartDetailId = table.Column<int>(type: "int", nullable: false),
-                    DogProductItemId = table.Column<int>(type: "int", nullable: false),
-                    DogItemId = table.Column<int>(type: "int", nullable: false)
+                    detailsCartDetailId = table.Column<int>(type: "int", nullable: false),
+                    inventoriesInventoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DogItemInventory", x => new { x.CartDetailId, x.DogProductItemId });
+                    table.PrimaryKey("PK_CartDetailInventory", x => new { x.detailsCartDetailId, x.inventoriesInventoryId });
                     table.ForeignKey(
-                        name: "FK_DogItemInventory_CartDetail_CartDetailId",
-                        column: x => x.CartDetailId,
+                        name: "FK_CartDetailInventory_CartDetail_detailsCartDetailId",
+                        column: x => x.detailsCartDetailId,
                         principalTable: "CartDetail",
                         principalColumn: "CartDetailId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartDetailInventory_Inventory_inventoriesInventoryId",
+                        column: x => x.inventoriesInventoryId,
+                        principalTable: "Inventory",
+                        principalColumn: "InventoryId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DogProductItemInventory",
+                columns: table => new
+                {
+                    dogitemDogProductItemId = table.Column<int>(type: "int", nullable: false),
+                    inventoriesInventoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DogProductItemInventory", x => new { x.dogitemDogProductItemId, x.inventoriesInventoryId });
+                    table.ForeignKey(
+                        name: "FK_DogProductItemInventory_DogProductItem_dogitemDogProductItemId",
+                        column: x => x.dogitemDogProductItemId,
+                        principalTable: "DogProductItem",
+                        principalColumn: "DogProductItemId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DogProductItemInventory_Inventory_inventoriesInventoryId",
+                        column: x => x.inventoriesInventoryId,
+                        principalTable: "Inventory",
+                        principalColumn: "InventoryId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DogItemInventory",
+                columns: table => new
+                {
+                    DogItemId = table.Column<int>(type: "int", nullable: false),
+                    inventoriesInventoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DogItemInventory", x => new { x.DogItemId, x.inventoriesInventoryId });
                     table.ForeignKey(
                         name: "FK_DogItemInventory_DogItem_DogItemId",
                         column: x => x.DogItemId,
@@ -203,10 +258,10 @@ namespace PetShop.Migrations
                         principalColumn: "DogItemId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DogItemInventory_DogProductItem_DogProductItemId",
-                        column: x => x.DogProductItemId,
-                        principalTable: "DogProductItem",
-                        principalColumn: "DogProductItemId",
+                        name: "FK_DogItemInventory_Inventory_inventoriesInventoryId",
+                        column: x => x.inventoriesInventoryId,
+                        principalTable: "Inventory",
+                        principalColumn: "InventoryId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -272,24 +327,29 @@ namespace PetShop.Migrations
                 column: "CartId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CartDetailInventory_inventoriesInventoryId",
+                table: "CartDetailInventory",
+                column: "inventoriesInventoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DogItem_DogSpeciesId",
                 table: "DogItem",
                 column: "DogSpeciesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DogItemInventory_DogItemId",
+                name: "IX_DogItemInventory_inventoriesInventoryId",
                 table: "DogItemInventory",
-                column: "DogItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DogItemInventory_DogProductItemId",
-                table: "DogItemInventory",
-                column: "DogProductItemId");
+                column: "inventoriesInventoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DogProductItem_DogProductTypeId",
                 table: "DogProductItem",
                 column: "DogProductTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DogProductItemInventory_inventoriesInventoryId",
+                table: "DogProductItemInventory",
+                column: "inventoriesInventoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoice_OrderId",
@@ -328,7 +388,13 @@ namespace PetShop.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CartDetailInventory");
+
+            migrationBuilder.DropTable(
                 name: "DogItemInventory");
+
+            migrationBuilder.DropTable(
+                name: "DogProductItemInventory");
 
             migrationBuilder.DropTable(
                 name: "Invoice");
@@ -338,6 +404,9 @@ namespace PetShop.Migrations
 
             migrationBuilder.DropTable(
                 name: "CartDetail");
+
+            migrationBuilder.DropTable(
+                name: "Inventory");
 
             migrationBuilder.DropTable(
                 name: "DogItem");
