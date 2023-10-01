@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PetShop.Migrations
 {
-    public partial class createmodel : Migration
+    public partial class CreateModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -122,7 +122,6 @@ namespace PetShop.Migrations
                     DogItemId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DogName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DogSpecies = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false),
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Sex = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -130,7 +129,7 @@ namespace PetShop.Migrations
                     Origin = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HealthStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Images = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Images = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     IsInStock = table.Column<bool>(type: "bit", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: true),
                     DogSpeciesId = table.Column<int>(type: "int", nullable: false),

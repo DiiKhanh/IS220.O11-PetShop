@@ -12,8 +12,8 @@ using PetShop.Data;
 namespace PetShop.Migrations
 {
     [DbContext(typeof(PetShopDbContext))]
-    [Migration("20230927100254_create-model")]
-    partial class createmodel
+    [Migration("20231001172253_Create-Model")]
+    partial class CreateModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -398,9 +398,6 @@ namespace PetShop.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DogSpecies")
-                        .HasColumnType("int");
-
                     b.Property<int>("DogSpeciesId")
                         .HasColumnType("int");
 
@@ -409,7 +406,6 @@ namespace PetShop.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Images")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<bool?>("IsDeleted")
