@@ -396,9 +396,6 @@ namespace PetShop.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DogSpecies")
-                        .HasColumnType("int");
-
                     b.Property<int>("DogSpeciesId")
                         .HasColumnType("int");
 
@@ -407,7 +404,6 @@ namespace PetShop.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Images")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<bool?>("IsDeleted")

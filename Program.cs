@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PetShop.Data;
+using PetShop.Services.DogItemService;
 using PetShop.Services.EmailService;
 using PetShop.Services.UserService;
 
@@ -17,6 +18,7 @@ builder.Services.AddEndpointsApiExplorer();
 // add Service Imple
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IDogItemService, DogItemService>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>  
 policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
