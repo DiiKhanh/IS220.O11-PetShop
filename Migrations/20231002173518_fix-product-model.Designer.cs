@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetShop.Data;
 
@@ -11,9 +12,10 @@ using PetShop.Data;
 namespace PetShop.Migrations
 {
     [DbContext(typeof(PetShopDbContext))]
-    partial class PetShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231002173518_fix-product-model")]
+    partial class fixproductmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -505,58 +507,6 @@ namespace PetShop.Migrations
                     b.HasKey("DogSpeciesId");
 
                     b.ToTable("DogSpecies");
-
-                    b.HasData(
-                        new
-                        {
-                            DogSpeciesId = 1,
-                            DogSpeciesName = "Golden Retriever"
-                        },
-                        new
-                        {
-                            DogSpeciesId = 2,
-                            DogSpeciesName = "Alaska"
-                        },
-                        new
-                        {
-                            DogSpeciesId = 3,
-                            DogSpeciesName = "Husky"
-                        },
-                        new
-                        {
-                            DogSpeciesId = 4,
-                            DogSpeciesName = "Corgi"
-                        },
-                        new
-                        {
-                            DogSpeciesId = 5,
-                            DogSpeciesName = "Doberman"
-                        },
-                        new
-                        {
-                            DogSpeciesId = 6,
-                            DogSpeciesName = "Pitbull"
-                        },
-                        new
-                        {
-                            DogSpeciesId = 7,
-                            DogSpeciesName = "Lạp Xưởng"
-                        },
-                        new
-                        {
-                            DogSpeciesId = 8,
-                            DogSpeciesName = "Poodle"
-                        },
-                        new
-                        {
-                            DogSpeciesId = 9,
-                            DogSpeciesName = "Chihuahua"
-                        },
-                        new
-                        {
-                            DogSpeciesId = 10,
-                            DogSpeciesName = "Shiba"
-                        });
                 });
 
             modelBuilder.Entity("PetShop.Models.Invoice", b =>

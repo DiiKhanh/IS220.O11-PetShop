@@ -16,7 +16,7 @@ namespace PetShop.Models
         public string Origin { get; set; }
         public string HealthStatus { get; set; }
         public string Description { get; set; }
-        public byte[]? Images { get; set; }
+        public byte[] Images { get; set; }
         public bool? IsInStock { get; set; }
         public bool? IsDeleted { get; set; }
 
