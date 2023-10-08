@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Constraints;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
@@ -8,6 +9,7 @@ using PetShop.Data;
 using PetShop.DTOs;
 using PetShop.Helpers;
 using PetShop.Models;
+using System.Reflection.Metadata;
 
 namespace PetShop.Services.DogProductItemService
 {
@@ -15,12 +17,10 @@ namespace PetShop.Services.DogProductItemService
     {
         private readonly PetShopDbContext _context;
         internal DbSet<DogProductItem> _dbset;
-        private readonly IWebHostEnvironment _environment;
-        public DogProductItemService(PetShopDbContext context,IWebHostEnvironment environment)
+        public DogProductItemService(PetShopDbContext context)
         {
             _context = context;
             this._dbset = _context.Set<DogProductItem>();
-            _environment = environment;
         }
 
        public async Task<DogProductItem> Add(DogProductItemDto dogProductItemDto)
@@ -70,7 +70,7 @@ namespace PetShop.Services.DogProductItemService
 
         }
 
-        public async Task<List<DogProductItem>?> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var dogProductItem = _dbset.SingleOrDefault(product => product.DogProductItemId == id);
             if (dogProductItem != null)
@@ -78,27 +78,55 @@ namespace PetShop.Services.DogProductItemService
                 dogProductItem.IsDeleted = true;
                 _dbset.Remove(dogProductItem);
                 _context.SaveChanges();
-                return await _dbset.ToListAsync();
+                return await GetAll();
             }
             return null;
         }
 
-        public async Task<DogProductItem?> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var dogProductItem = await _dbset.SingleOrDefaultAsync(product => product.DogProductItemId == id);
             if (dogProductItem != null)
             {
-                return dogProductItem;
+                return (ResponseHelper.Ok(
+                    new
+                    {
+                        dogProductItem.DogProductItemId,
+                        dogProductItem.ItemName,
+                        dogProductItem.Price,
+                        dogProductItem.Category,
+                        dogProductItem.Description,
+                        Images = JsonConvert.DeserializeObject(dogProductItem.Images),
+                        dogProductItem.Quantity,
+                        dogProductItem.IsInStock,
+                        dogProductItem.IsDeleted
+                    }));
             }
             return null;
         }
 
-        public async Task<List<DogProductItem>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return await _dbset.ToListAsync();
+            var dogproducts = await _context.DogProductItem.Where(d => d.IsDeleted != true).ToListAsync();
+            List<object> responselist = new List<object>();
+            dogproducts.ForEach(dogProductItem =>
+            {
+                var images = JsonConvert.DeserializeObject<string[]>(dogProductItem.Images);
+                object response = new
+                {
+                    dogProductItem.DogProductItemId,
+                    dogProductItem.ItemName,
+                    dogProductItem.Price,
+                    dogProductItem.Category,
+                    dogProductItem.Description,
+                    Images = images,
+                    dogProductItem.Quantity,
+                    dogProductItem.IsInStock,
+                    dogProductItem.IsDeleted
+                };
+                responselist.Add(response);
+            });
+            return ResponseHelper.Ok(responselist);
         }
-
-       
-        
     }
 }
