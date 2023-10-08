@@ -1,4 +1,6 @@
-﻿{
+﻿// tao file appsettings.json roi pass nay vo
+
+{
     "ConnectionStrings": {
         "PetShop": "Server=.; Database=PetShop; Integrated Security=True; ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
     },

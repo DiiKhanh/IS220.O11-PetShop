@@ -26,7 +26,7 @@ namespace PetShop.Services.DogProductItemService
        public async Task<DogProductItem> Add(DogProductItemDto dogProductItemDto)
         {
             DateTime  currentDateTime = DateTime.Now;
-            string images=JsonConvert.SerializeObject(dogProductItemDto.Images);
+            var images=JsonConvert.SerializeObject(dogProductItemDto.Images);
             if (await _context.DogProductItem.AnyAsync(product => product.ItemName == dogProductItemDto.ItemName))
             {
 
@@ -49,7 +49,7 @@ namespace PetShop.Services.DogProductItemService
         }
         public async Task<DogProductItem?> Update(int id, DogProductItemDto dogProductItemDto)
         {
-            string images = JsonConvert.SerializeObject(dogProductItemDto.Images);
+            var images = JsonConvert.SerializeObject(dogProductItemDto.Images);
             var newDogProductItem = await _context.DogProductItem.SingleOrDefaultAsync(product => product.DogProductItemId == id);
             if (newDogProductItem != null)
             {
