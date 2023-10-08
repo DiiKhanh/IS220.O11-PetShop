@@ -1,6 +1,6 @@
 ﻿{
     "ConnectionStrings": {
-        "PetShop": "Server={your server}; Database={name db}; Integrated Security=True; ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+        "PetShop": "Server=.; Database=PetShop; Integrated Security=True; ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
     },
     "Logging": {
         "LogLevel": {
