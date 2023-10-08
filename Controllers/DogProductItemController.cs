@@ -54,7 +54,7 @@ namespace PetShop.Controllers
             
         }
         [HttpPut("update-dog-product-item/{id}")]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, DogProductItemDto product)
         {
             try

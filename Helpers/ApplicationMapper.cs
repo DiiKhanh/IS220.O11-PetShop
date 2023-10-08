@@ -10,6 +10,11 @@ namespace PetShop.Helpers
         {
             CreateMap<DogItemDto,DogItem>();
             CreateMap<DogItem, DogItemDto>();
+            CreateMap<DogProductItemResponse, DogProductItem>()
+                .ForMember(dest => dest.Images, opt => opt.Ignore());
+            CreateMap<DogProductItem, DogProductItemResponse>()
+                .ForMember(dest => dest.Images, opt => opt.Ignore());
+
         }
     }
 }
