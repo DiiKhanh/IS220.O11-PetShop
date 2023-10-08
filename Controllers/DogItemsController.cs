@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PetShop.DTOs;
 using PetShop.Helpers;
 using PetShop.Services.DogItemService;
@@ -11,11 +13,15 @@ namespace PetShop.Controllers
     public class DogItemsController : ControllerBase
     {
         private readonly IDogItemService _dogitemservice;
+        private readonly IDogSpeciesService _speciesservice;
+        private readonly IConfiguration configuration;
 
-        public DogItemsController(IDogItemService dogitemservice)
+        public DogItemsController(IDogItemService dogitemservice, IConfiguration _configuration,
+            IDogSpeciesService speciesservice)
         {
             _dogitemservice = dogitemservice;
-
+            _configuration = configuration;
+            _speciesservice = speciesservice;
         }
 
         //GET: api/DogItems/get-all-dog Lay danh sach chó
@@ -23,55 +29,51 @@ namespace PetShop.Controllers
        [Route("get-all")]
         public async Task<IActionResult> GetAllDogItem()
         {
-            var results = await _dogitemservice.GetAllDogItems();
-            return ResponseHelper.Ok(results);
+            return await _dogitemservice.GetAllDogItems();
         }
 
         // GET: api/DogItems/get-dog/5 Lay thong tin chu cho có id = {id}
         [HttpGet("get-dog/{id}")]
-        public async Task<IActionResult> GetDogItem(int id)
+        public async Task<IActionResult> GetDogItem([FromRoute]int id)
         {
-            var result = await _dogitemservice.GetDogItem(id);
-            if (result == null)
-            {
-                return ResponseHelper.NotFound();
-            }
-            return ResponseHelper.Ok(result);
+            return await _dogitemservice.GetDogItem(id);
         }
 
         // PUT: api/DogItems/update-dog-item/5 update thông tin chú chó có id = {id}
         [HttpPut("update-dog-item/{id}")]
-        [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> UpdateDogItem(int id, DogItemDto request)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateDogItem([FromRoute]int id, DogItemDto request)
         {
-            var result = await _dogitemservice.UpdateDogItem(id, request);
-            if (result == null)
-            {
-                return ResponseHelper.BadRequest("Không tìm thấy chú chó cần update.");
-            }
-            return ResponseHelper.Ok(result);
+            return await _dogitemservice.UpdateDogItem(id, request);
         }
 
         // POST: api/DogItems/add-dog Thêm chó
         [HttpPost("add-dog")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddDogItem(DogItemDto request)
+        public async Task<IActionResult> AddDogItem([FromBody]DogItemDto request)
         {
-            return ResponseHelper.Ok(await _dogitemservice.AddDogItem(request));
+            return await _dogitemservice.AddDogItem(request);
         }
 
         // DELETE: api/DogItems/5 Xóa 1 chú chó
         [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteDogItem(int id)
+        public async Task<IActionResult> DeleteDogItem([FromRoute] int id)
         {
-            var result = await _dogitemservice.DeleteDogItem(id);
-            if (result == null)
-            {
-                return ResponseHelper.NotFound();
-            }
-            return ResponseHelper.Ok(result);
+            return await _dogitemservice.DeleteDogItem(id);
         }
 
+        //GET: api/DogItems/speciesid Lấy ra danh sách chó có id specie = {specieid}
+        [HttpGet("get-dog-by-specie/{specieid}")]
+        public async Task<IActionResult> GetDogItemBySpecie([FromRoute]int specieid)
+        {
+            return await _dogitemservice.GetDogBySpecies(specieid);
+        }
+
+        [HttpGet("get-all-species")]
+        public async Task<IActionResult> GetAllSpecies()
+        {
+            return await _speciesservice.GetAllSpecies();
+        }
     }
 }
