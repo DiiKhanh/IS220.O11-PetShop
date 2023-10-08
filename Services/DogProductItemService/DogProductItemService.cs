@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
 using PetShop.Data;
 using PetShop.DTOs;
+using PetShop.Helpers;
 using PetShop.Models;
 
 namespace PetShop.Services.DogProductItemService
@@ -26,6 +27,11 @@ namespace PetShop.Services.DogProductItemService
         {
             DateTime  currentDateTime = DateTime.Now;
             string images=JsonConvert.SerializeObject(dogProductItemDto.Images);
+            if (await _context.DogProductItem.AnyAsync(product => product.ItemName == dogProductItemDto.ItemName))
+            {
+
+                throw new Exception("Tên sản phẩm đã tồn tại");
+            }
             var newDogProductItem = new DogProductItem()
             {
                 ItemName = dogProductItemDto.ItemName,

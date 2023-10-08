@@ -6,7 +6,7 @@ namespace PetShop.DTOs
 {
     public class DogProductItemDto
     {
-        public int? DogProductItemId { get; set; }
+        [Required]
         public string ItemName { get; set; }
         public int Price { get; set; }
         public string Category { get; set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetShop.DTOs;
@@ -28,9 +29,9 @@ namespace PetShop.Controllers
                 var results = await _dogProductItemService.GetAll();
                 return ResponseHelper.Ok(results);
             }
-            catch
+            catch(Exception ex) 
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ResponseHelper.BadRequest(ex.Message);
             }
             
         }
@@ -79,9 +80,9 @@ namespace PetShop.Controllers
                 return ResponseHelper.Ok(await _dogProductItemService.Add(product));
 
             }
-            catch
+            catch(Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return ResponseHelper.Created(ex.Message);
             }
         }
 
