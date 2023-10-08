@@ -16,7 +16,7 @@ namespace PetShop.Models
         public string Origin { get; set; }
         public string HealthStatus { get; set; }
         public string Description { get; set; }
-        public byte[] Images { get; set; }
+        public string? Images { get; set; }
         public bool? IsInStock { get; set; }
         public bool? IsDeleted { get; set; }
 
@@ -25,7 +25,7 @@ namespace PetShop.Models
 
         public ICollection<OrderDetail> orderDetails { get; set; } = new List<OrderDetail>();
 
-        public ICollection<CartDetail> cartDetails { get; set; } 
+        public ICollection<CartDetail> cartDetails { get; set; }  = new List<CartDetail>();
 
     }
 }

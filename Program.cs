@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,9 +17,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 // add Service Imple
+builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            options.JsonSerializerOptions.IgnoreNullValues = true;
+        });
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDogItemService, DogItemService>();
+builder.Services.AddScoped<IDogSpeciesService, DogSpeciesService>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>  
 policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
