@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetShop.Data;
 
@@ -11,9 +12,10 @@ using PetShop.Data;
 namespace PetShop.Migrations
 {
     [DbContext(typeof(PetShopDbContext))]
-    partial class PetShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231008083321_image")]
+    partial class image
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -403,8 +405,9 @@ namespace PetShop.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Images")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("Images")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");

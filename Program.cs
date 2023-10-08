@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PetShop.Data;
 using PetShop.Services.DogItemService;
+using PetShop.Services.DogProductItemService;
 using PetShop.Services.EmailService;
 using PetShop.Services.UserService;
 
@@ -27,7 +28,9 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDogItemService, DogItemService>();
+builder.Services.AddScoped<IDogProductItemService, DogProductItemService>();
 builder.Services.AddScoped<IDogSpeciesService, DogSpeciesService>();
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>  
 policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
