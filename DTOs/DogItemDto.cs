@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PetShop.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace PetShop.DTOs
 {
@@ -7,7 +8,7 @@ namespace PetShop.DTOs
         [Required]
         public string DogName { get; set; }
         [Required]
-        public int DogSpeciesId { get; set; }
+        public string SpeciesName { get; set; }
         [Required]
         public int Price { get; set; }
         public string Color { get; set; }
@@ -16,6 +17,6 @@ namespace PetShop.DTOs
         public string Origin { get; set; }
         public string HealthStatus { get; set; }
         public string Description { get; set; }
-        public byte[] Images { get; set; }
+        public string[] Images { get; set; }
     }
 }

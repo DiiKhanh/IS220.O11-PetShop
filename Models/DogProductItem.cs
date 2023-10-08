@@ -12,7 +12,7 @@ namespace PetShop.Models
         public int Price { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
-        public string Images { get; set; }
+        public string? Images { get; set; }
         public int Quantity { get; set; }
         public bool? IsInStock { get; set; }
         public bool? IsDeleted { get; set; }

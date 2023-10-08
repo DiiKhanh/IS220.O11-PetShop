@@ -6,10 +6,11 @@ namespace PetShop.Services.DogItemService
 {
     public interface IDogItemService
     {
-        Task<IEnumerable<DogItem>> GetAllDogItems();
-        Task<DogItem?> GetDogItem(int id);
-        Task<DogItem> AddDogItem(DogItemDto request);
-        Task<DogItem?> UpdateDogItem(int id, DogItemDto request);
-        Task<IEnumerable<DogItem>?> DeleteDogItem(int id);
+        Task<IActionResult> GetAllDogItems();
+        Task<IActionResult> GetDogItem(int id);
+        Task<IActionResult> AddDogItem(DogItemDto request);
+        Task<IActionResult> UpdateDogItem(int id, DogItemDto request);
+        Task<IActionResult> DeleteDogItem(int id);
+        Task<IActionResult> GetDogBySpecies(int specieid);
     }
 }

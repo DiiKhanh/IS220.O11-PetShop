@@ -1,84 +1,189 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Newtonsoft.Json;
 using PetShop.Data;
 using PetShop.DTOs;
 using PetShop.Helpers;
 using PetShop.Models;
-using PetShop.Services.EmailService;
-using System.Drawing;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PetShop.Services.DogItemService
 {
     public class DogItemService : IDogItemService
     {
         private readonly PetShopDbContext _context;
-        internal DbSet<DogItem> _dbset;
-        public DogItemService(PetShopDbContext context)
+        private readonly IMapper _mapper;
+
+        public DogItemService(PetShopDbContext context, IMapper mapper)
         {
             _context = context;
-            this._dbset = _context.Set<DogItem>();
+            _mapper = mapper;
         }
 
-        public async Task<DogItem> AddDogItem(DogItemDto request)
+        public async Task<IActionResult> GetAllDogItems()
         {
-            var dogitem = new DogItem()
+            var dogitems = await _context.DogItem.Include(d => d.Species).Where(d => d.IsDeleted!=true).ToListAsync();
+            List<object> responselist = new List<object>();
+            dogitems.ForEach(dog =>
             {
-                DogName = request.DogName,
-                DogSpeciesId = request.DogSpeciesId,
-                Price = request.Price,
-                Color = request.Color,
-                Sex = request.Sex,
-                Age = request.Age,
-                Origin = request.Origin,
-                HealthStatus = request.HealthStatus,
-                Description = request.Description,
-                Images = request.Images,
-            };
-            await _dbset.AddAsync(dogitem);
+                var images = JsonConvert.DeserializeObject<string[]>(dog.Images);
+                object response = new
+                {
+                    dog.DogItemId,
+                    dog.DogName,
+                    dog.Species.DogSpeciesName,
+                    dog.DogSpeciesId,
+                    dog.Price,
+                    dog.Color,
+                    dog.Sex,
+                    dog.Age,
+                    dog.Origin,
+                    dog.HealthStatus,
+                    dog.Description,
+                    Images = images,
+                    dog.CreateAt,
+                    dog.UpdatedAt,
+                    dog.IsInStock,
+                    dog.IsDeleted
+                };
+                responselist.Add(response);
+            });
+            return ResponseHelper.Ok(responselist);
+        }
+        public async Task<IActionResult> AddDogItem(DogItemDto request)
+        {
+            var existsdog =
+                await _context.DogItem.FirstOrDefaultAsync(e => e.DogName.ToLower().Trim() == request.DogName.ToLower().Trim());
+            if (existsdog is not null) return ResponseHelper.BadRequest("Trùng tên chó rồi bạn ơi.");
+            var specieid = _context.DogSpecies.FirstOrDefault(p => p.DogSpeciesName == request.SpeciesName);
+            var dogmap = _mapper.Map<DogItem>(request);
+            dogmap.DogSpeciesId = (int)specieid.DogSpeciesId;
+            dogmap.Images = JsonConvert.SerializeObject(request.Images);
+            dogmap.CreateAt = DateTime.UtcNow;
+            dogmap.UpdatedAt = DateTime.UtcNow;
+            await _context.DogItem.AddAsync(dogmap);
             await _context.SaveChangesAsync();
-            return dogitem;
+            var Images = JsonConvert.DeserializeObject<List<string>>(dogmap.Images);
+            return ResponseHelper.Ok(new
+            {
+                dogmap.DogItemId,
+                dogmap.DogName,
+                dogmap.Species.DogSpeciesName,
+                dogmap.Price,
+                dogmap.Color,
+                dogmap.Sex,
+                dogmap.Age,
+                dogmap.Origin,
+                dogmap.HealthStatus,
+                dogmap.Description,
+                Images,
+                dogmap.CreateAt,
+                dogmap.UpdatedAt
+            }) ;
         }
 
-        public async Task<IEnumerable<DogItem>?> DeleteDogItem(int id)
+        public async Task<IActionResult> DeleteDogItem(int id)
         {
-            var dogitem = _dbset.FirstOrDefault(x => x.DogItemId == id);
-            if (dogitem == null) { return null; }
-            //_dbset.Remove(dogitem);
-            //_context.SaveChanges();
+            var dogitem = _context.DogItem.FirstOrDefault(x => x.DogItemId == id);
+            if (dogitem is null || dogitem.IsDeleted == true) return ResponseHelper.NotFound();
+            if (dogitem == null) return ResponseHelper.NotFound();
+            //_context.DogItem.Remove(dogitem);
             dogitem.IsDeleted = true;
-            return await _dbset.ToListAsync();
-        }
-        public async Task<IEnumerable<DogItem>> GetAllDogItems()
-        {
-            return await _dbset.ToListAsync();
-        }
-        public async Task<DogItem?> GetDogItem(int id)
-        {
-            var dogitem = await _dbset.FirstOrDefaultAsync(x => x.DogItemId == id);
-            if (dogitem is null) return null;
-            return dogitem;
+            _context.SaveChanges();
+            return await GetAllDogItems();
         }
 
-        public async Task<DogItem?> UpdateDogItem(int id, DogItemDto request)
+        public async Task<IActionResult> GetDogItem(int id)
         {
-            var dogitem = await _dbset.FirstOrDefaultAsync(x => x.DogItemId == id);
-            if (dogitem is null) return null;
-            dogitem.DogName = request.DogName;
-            dogitem.DogSpeciesId = request.DogSpeciesId;
-            dogitem.Price = request.Price;
-            dogitem.Color = request.Color;
-            dogitem.Sex = request.Sex;
-            dogitem.Age = request.Age;
-            dogitem.Origin = request.Origin;
-            dogitem.HealthStatus = request.HealthStatus;
-            dogitem.Description = request.Description;
-            dogitem.Images = request.Images;
-            await _context.SaveChangesAsync();
-            return dogitem;
+            var dogitem = await _context.DogItem.Include(d => d.Species).FirstOrDefaultAsync(x => x.DogItemId == id);
+            if (dogitem is null || dogitem.IsDeleted == true) return ResponseHelper.NotFound();
+            var Images = JsonConvert.DeserializeObject<List<string>>(dogitem.Images);
+            return ResponseHelper.Ok(new
+            {
+                dogitem.DogItemId,
+                dogitem.DogName,
+                dogitem.Species.DogSpeciesName,
+                dogitem.Price,
+                dogitem.Color,
+                dogitem.Sex,
+                dogitem.Age,
+                dogitem.Origin,
+                dogitem.HealthStatus,
+                dogitem.Description,
+                Images,
+                dogitem.CreateAt,
+                dogitem.UpdatedAt
+            }) ;
+        }
+
+        public async Task<IActionResult> UpdateDogItem(int id, DogItemDto request)
+        {
+            var dogitem =
+                await _context.DogItem.FirstOrDefaultAsync(x => x.DogItemId == id);
+            if (dogitem is null || dogitem.IsDeleted == true) return ResponseHelper.NotFound();
+            var existsdog =
+                await _context.DogItem.FirstOrDefaultAsync(e => e.DogName.ToLower() == request.DogName.ToLower() && e.DogItemId != id);
+            if (existsdog is not null) return ResponseHelper.BadRequest("Trùng tên chó rồi bạn ơi.");
+            try
+            {
+                var specieid = _context.DogSpecies.FirstOrDefault(p => p.DogSpeciesName == request.SpeciesName);
+                if (dogitem is null) return ResponseHelper.NotFound();
+                _mapper.Map(request, dogitem);
+                dogitem.Images = JsonConvert.SerializeObject(request.Images);
+                dogitem.DogSpeciesId = (int)specieid.DogSpeciesId;
+                dogitem.UpdatedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+            } catch (Exception)
+            {
+                return ResponseHelper.BadRequest("Không thể cập nhật. Vui lòng thử lại");
+            }
+            var Images = JsonConvert.DeserializeObject<List<string>>(dogitem.Images);
+            return ResponseHelper.Ok(new
+            {
+                dogitem.DogItemId,
+                dogitem.DogName,
+                dogitem.Species.DogSpeciesName,
+                dogitem.Price,
+                dogitem.Color,
+                dogitem.Sex,
+                dogitem.Age,
+                dogitem.Origin,
+                dogitem.HealthStatus,
+                dogitem.Description,
+                Images,
+                dogitem.CreateAt,
+                dogitem.UpdatedAt
+            }
+            );
+        }
+
+        public async Task<IActionResult> GetDogBySpecies(int specieid)
+        {
+            var dogitems = await _context.DogItem.Include(d => d.Species).Where(e => e.DogSpeciesId == specieid).ToListAsync();
+            List<object> responselist = new List<object>();
+            dogitems.ForEach(dog =>
+            {
+                var images = JsonConvert.DeserializeObject<string[]>(dog.Images);
+                object response = new
+                {
+                    dog.DogItemId,
+                    dog.DogName,
+                    dog.Species.DogSpeciesName,
+                    dog.DogSpeciesId,
+                    dog.Price,
+                    dog.Color,
+                    dog.Sex,
+                    dog.Age,
+                    dog.Origin,
+                    dog.HealthStatus,
+                    dog.Description,
+                    Images = images,
+                    dog.CreateAt,
+                    dog.UpdatedAt
+                };
+                responselist.Add(response);
+            });
+            return ResponseHelper.Ok(responselist);
         }
     }
-
 }

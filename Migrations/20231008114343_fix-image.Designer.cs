@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetShop.Data;
 
@@ -11,9 +12,10 @@ using PetShop.Data;
 namespace PetShop.Migrations
 {
     [DbContext(typeof(PetShopDbContext))]
-    partial class PetShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231008114343_fix-image")]
+    partial class fiximage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -453,7 +455,6 @@ namespace PetShop.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Images")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsDeleted")
