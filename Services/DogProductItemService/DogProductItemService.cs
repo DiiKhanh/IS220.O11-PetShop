@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -17,13 +18,15 @@ namespace PetShop.Services.DogProductItemService
     {
         private readonly PetShopDbContext _context;
         internal DbSet<DogProductItem> _dbset;
-        public DogProductItemService(PetShopDbContext context)
+        private readonly IMapper _mapper;
+        public DogProductItemService(PetShopDbContext context, IMapper mapper)
         {
             _context = context;
             this._dbset = _context.Set<DogProductItem>();
+            this._mapper = mapper;
         }
 
-       public async Task<DogProductItem> Add(DogProductItemDto dogProductItemDto)
+       public async Task<DogProductItemResponse> Add(DogProductItemDto dogProductItemDto)
         {
             DateTime  currentDateTime = DateTime.Now;
             var images=JsonConvert.SerializeObject(dogProductItemDto.Images);
@@ -43,11 +46,13 @@ namespace PetShop.Services.DogProductItemService
                 Quantity = dogProductItemDto.Quantity,
                 CreateAt = currentDateTime
             };
+            DogProductItemResponse map = _mapper.Map<DogProductItemResponse>(newDogProductItem);
+            map.Images = JsonConvert.DeserializeObject<string[]>(newDogProductItem.Images);
             await _context.AddAsync(newDogProductItem);
             await _context.SaveChangesAsync();
-            return newDogProductItem;
+            return map;
         }
-        public async Task<DogProductItem?> Update(int id, DogProductItemDto dogProductItemDto)
+        public async Task<DogProductItemResponse?> Update(int id, DogProductItemDto dogProductItemDto)
         {
             var images = JsonConvert.SerializeObject(dogProductItemDto.Images);
             var newDogProductItem = await _context.DogProductItem.SingleOrDefaultAsync(product => product.DogProductItemId == id);
@@ -63,14 +68,16 @@ namespace PetShop.Services.DogProductItemService
                 newDogProductItem.Quantity = dogProductItemDto.Quantity;
                 newDogProductItem.UpdatedAt = currentDateTime;
                 await _context.SaveChangesAsync();
-                return newDogProductItem;
+                DogProductItemResponse response = _mapper.Map<DogProductItemResponse>(newDogProductItem);
+                response.Images = JsonConvert.DeserializeObject<string[]>(newDogProductItem.Images);
+                return response;
             }
             
             return null;
 
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<List<DogProductItemResponse>> Delete(int id)
         {
             var dogProductItem = _dbset.SingleOrDefault(product => product.DogProductItemId == id);
             if (dogProductItem != null)
@@ -83,50 +90,31 @@ namespace PetShop.Services.DogProductItemService
             return null;
         }
 
-        public async Task<IActionResult> Get(int id)
+        public async Task<DogProductItemResponse> Get(int id)
         {
             var dogProductItem = await _dbset.SingleOrDefaultAsync(product => product.DogProductItemId == id);
+            var dogproductmap = _mapper.Map<DogProductItemResponse>(dogProductItem);
+            dogproductmap.DogProductItemId = (int)dogProductItem.DogProductItemId;
+            dogproductmap.Images = JsonConvert.DeserializeObject<string[]>(dogProductItem.Images);
             if (dogProductItem != null)
             {
-                return (ResponseHelper.Ok(
-                    new
-                    {
-                        dogProductItem.DogProductItemId,
-                        dogProductItem.ItemName,
-                        dogProductItem.Price,
-                        dogProductItem.Category,
-                        dogProductItem.Description,
-                        Images = JsonConvert.DeserializeObject(dogProductItem.Images),
-                        dogProductItem.Quantity,
-                        dogProductItem.IsInStock,
-                        dogProductItem.IsDeleted
-                    }));
+                return dogproductmap;
             }
             return null;
         }
 
-        public async Task<IActionResult> GetAll()
+        public async Task<List<DogProductItemResponse>> GetAll()
         {
-            var dogproducts = await _context.DogProductItem.Where(d => d.IsDeleted != true).ToListAsync();
-            List<object> responselist = new List<object>();
-            dogproducts.ForEach(dogProductItem =>
+            var items = await _context.DogProductItem.Where(d => d.IsDeleted != true).ToListAsync();
+            List<DogProductItemResponse> responselist = new List<DogProductItemResponse>();
+            items.ForEach(dogProductItem =>
             {
-                var images = JsonConvert.DeserializeObject<string[]>(dogProductItem.Images);
-                object response = new
-                {
-                    dogProductItem.DogProductItemId,
-                    dogProductItem.ItemName,
-                    dogProductItem.Price,
-                    dogProductItem.Category,
-                    dogProductItem.Description,
-                    Images = images,
-                    dogProductItem.Quantity,
-                    dogProductItem.IsInStock,
-                    dogProductItem.IsDeleted
-                };
-                responselist.Add(response);
+                DogProductItemResponse dogproducts = _mapper.Map<DogProductItemResponse>(dogProductItem);
+                dogproducts.Images = JsonConvert.DeserializeObject<string[]>(dogProductItem.Images);
+
+                responselist.Add(dogproducts);
             });
-            return ResponseHelper.Ok(responselist);
+            return responselist;
         }
     }
 }
