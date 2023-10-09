@@ -89,7 +89,7 @@ namespace PetShop.Services.DogItemService
             if (dogitem == null) return ResponseHelper.NotFound();
             //_context.DogItem.Remove(dogitem);
             dogitem.IsDeleted = true;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return await GetAllDogItems();
         }
 

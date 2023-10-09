@@ -83,8 +83,8 @@ namespace PetShop.Services.DogProductItemService
             if (dogProductItem != null)
             {
                 dogProductItem.IsDeleted = true;
-                _dbset.Remove(dogProductItem);
-                _context.SaveChanges();
+                // _dbset.Remove(dogProductItem);
+                await _context.SaveChangesAsync();
                 return await GetAll();
             }
             return null;
