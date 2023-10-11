@@ -12,5 +12,7 @@ namespace PetShop.Services.DogItemService
         Task<IActionResult> UpdateDogItem(int id, DogItemDto request);
         Task<IActionResult> DeleteDogItem(int id);
         Task<IActionResult> GetDogBySpecies(int specieid);
+        Task<IActionResult> GetAllDogItemsAdmin();
+        Task<IActionResult> GetDogItemAdmin(int id);
     }
 }

@@ -18,5 +18,7 @@ namespace PetShop.DTOs
         public string HealthStatus { get; set; }
         public string Description { get; set; }
         public string[] Images { get; set; }
+        public bool? IsInStock { get; set; }
+        public bool? IsDeleted { get; set; }
     }
 }
