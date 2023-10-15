@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PetShop.Data;
+using PetShop.Services.CartService;
 using PetShop.Services.DogItemService;
 using PetShop.Services.DogProductItemService;
 using PetShop.Services.EmailService;
@@ -30,6 +31,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDogItemService, DogItemService>();
 builder.Services.AddScoped<IDogProductItemService, DogProductItemService>();
 builder.Services.AddScoped<IDogSpeciesService, DogSpeciesService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>  
