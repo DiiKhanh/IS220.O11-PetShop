@@ -9,7 +9,7 @@ namespace PetShop.Services.DogItemService
         Task<IActionResult> GetAllDogItems();
         Task<IActionResult> GetDogItem(int id);
         Task<IActionResult> AddDogItem(DogItemDto request);
-        Task<IActionResult> UpdateDogItem(int id, DogItemDto request);
+        Task<IActionResult> UpdateDogItem(int id, DogItemDtoUpdate request);
         Task<IActionResult> DeleteDogItem(int id);
         Task<IActionResult> GetDogBySpecies(int specieid);
         Task<IActionResult> GetAllDogItemsAdmin();

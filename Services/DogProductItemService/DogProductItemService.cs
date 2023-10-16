@@ -38,12 +38,12 @@ namespace PetShop.Services.DogProductItemService
             var newDogProductItem = new DogProductItem()
             {
                 ItemName = dogProductItemDto.ItemName,
-                Price = dogProductItemDto.Price,
+                Price = (int)dogProductItemDto.Price,
                 Category = dogProductItemDto.Category,
                 Description = dogProductItemDto.Description,
                 Images = images,
                 IsDeleted = false,
-                Quantity = dogProductItemDto.Quantity,
+                Quantity = (int)dogProductItemDto.Quantity,
                 CreateAt = currentDateTime
             };
             DogProductItemResponse map = _mapper.Map<DogProductItemResponse>(newDogProductItem);
@@ -52,21 +52,21 @@ namespace PetShop.Services.DogProductItemService
             await _context.SaveChangesAsync();
             return map;
         }
-        public async Task<DogProductItemResponse?> Update(int id, DogProductItemDto dogProductItemDto)
+        public async Task<DogProductItemResponse?> Update(int id, DogProductItemDtoUpdate dogProductItemDto)
         {
             var images = JsonConvert.SerializeObject(dogProductItemDto.Images);
             var newDogProductItem = await _context.DogProductItem.SingleOrDefaultAsync(product => product.DogProductItemId == id);
             if (newDogProductItem != null)
             {
                 DateTime currentDateTime = DateTime.Now;
-                newDogProductItem.ItemName = dogProductItemDto.ItemName;
-                newDogProductItem.Price = dogProductItemDto.Price;
-                newDogProductItem.Category = dogProductItemDto.Category;
-                newDogProductItem.Description = dogProductItemDto.Description;
-                newDogProductItem.Images = images;
-                newDogProductItem.IsDeleted = dogProductItemDto.IsDeleted;
-                newDogProductItem.Quantity = dogProductItemDto.Quantity;
-                newDogProductItem.UpdatedAt = currentDateTime;
+                newDogProductItem.ItemName =     dogProductItemDto.ItemName    ?? newDogProductItem.ItemName     ;
+                if (dogProductItemDto.Price.HasValue) newDogProductItem.Price = (int)dogProductItemDto.Price;
+                newDogProductItem.Category =     dogProductItemDto.Category    ?? newDogProductItem.Category;
+                newDogProductItem.Description =  dogProductItemDto.Description ?? newDogProductItem.Description;
+                newDogProductItem.Images =       images                        ?? newDogProductItem.Images     ;
+                newDogProductItem.IsDeleted =    dogProductItemDto.IsDeleted   ?? newDogProductItem.IsDeleted;
+                if (dogProductItemDto.Quantity.HasValue) newDogProductItem.Quantity = (int)dogProductItemDto.Quantity;
+                newDogProductItem.UpdatedAt =    currentDateTime;
                 await _context.SaveChangesAsync();
                 DogProductItemResponse response = _mapper.Map<DogProductItemResponse>(newDogProductItem);
                 response.Images = JsonConvert.DeserializeObject<string[]>(newDogProductItem.Images);
@@ -116,5 +116,6 @@ namespace PetShop.Services.DogProductItemService
             });
             return responselist;
         }
+
     }
 }

@@ -21,4 +21,19 @@ namespace PetShop.DTOs
         public bool? IsInStock { get; set; }
         public bool? IsDeleted { get; set; }
     }
+    public class DogItemDtoUpdate
+    {
+        public string? DogName { get; set; }
+        public string? SpeciesName { get; set; }
+        public int? Price { get; set; }
+        public string? Color { get; set; }
+        public string? Sex { get; set; }
+        public int? Age { get; set; }
+        public string? Origin { get; set; }
+        public string? HealthStatus { get; set; }
+        public string? Description { get; set; }
+        public string[]? Images { get; set; }
+        public bool? IsInStock { get; set; }
+        public bool? IsDeleted { get; set; }
+    }
 }

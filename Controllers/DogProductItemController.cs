@@ -35,6 +35,7 @@ namespace PetShop.Controllers
             }
             
         }
+       
         [HttpGet("get-dog-product-item/{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -55,7 +56,7 @@ namespace PetShop.Controllers
         }
         [HttpPut("update-dog-product-item/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Update(int id, DogProductItemDto product)
+        public async Task<IActionResult> Update(int id, DogProductItemDtoUpdate product)
         {
             try
             {
