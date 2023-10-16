@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using PetShop.Data;
 using PetShop.DTOs;
+using PetShop.DTOs.Wrapper;
 using PetShop.Helpers;
 using PetShop.Models;
+using PetShop.Services.UriService;
+using SQLitePCL;
 
 namespace PetShop.Services.DogItemService
 {
@@ -278,5 +282,9 @@ namespace PetShop.Services.DogItemService
                 dogitem.IsInStock
             });
         }
+
+        
     }
+
+    
 }

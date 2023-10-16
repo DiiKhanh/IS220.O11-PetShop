@@ -148,7 +148,6 @@ namespace PetShop.Services.CartService
             if (cartDetailToRemove != null)
             {
                 findCart.cartDetails.Remove(cartDetailToRemove);
-                _context.CartDetail.Remove(cartDetailToRemove);
                 await _context.SaveChangesAsync();
                 await calTotal(findCart);
             }
