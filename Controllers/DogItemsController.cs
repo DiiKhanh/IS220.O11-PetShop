@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using PetShop.DTOs;
 using PetShop.Helpers;
 using PetShop.Services.DogItemService;
+using System.Text.Json.Nodes;
 
 namespace PetShop.Controllers
 {
@@ -42,7 +43,11 @@ namespace PetShop.Controllers
         // PUT: api/DogItems/update-dog-item/5 update thông tin chú chó có id = {id}
         [HttpPut("update-dog-item/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateDogItem([FromRoute]int id, DogItemDto request)
+        //public async Task<IActionResult> UpdateDogItem([FromRoute]int id, DogItemDto request)
+        //{
+        //    return await _dogitemservice.UpdateDogItem(id, request);
+        //}
+        public async Task<IActionResult> UpdateDogItem([FromRoute] int id,[FromBody] DogItemUpdateRequest request)
         {
             return await _dogitemservice.UpdateDogItem(id, request);
         }

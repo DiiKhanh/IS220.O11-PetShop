@@ -2,10 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NuGet.Protocol;
 using PetShop.Data;
 using PetShop.DTOs;
 using PetShop.Helpers;
 using PetShop.Models;
+using System;
+using System.ComponentModel;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace PetShop.Services.DogItemService
 {
@@ -22,7 +29,7 @@ namespace PetShop.Services.DogItemService
 
         public async Task<IActionResult> GetAllDogItems()
         {
-            var dogitems = await _context.DogItem.Include(d => d.Species).Where(d => d.IsDeleted!=true).ToListAsync();
+            var dogitems = await _context.DogItem.Include(d => d.Species).Where(d => d.IsDeleted != true).ToListAsync();
             List<object> responselist = new List<object>();
             dogitems.ForEach(dog =>
             {
@@ -83,7 +90,7 @@ namespace PetShop.Services.DogItemService
                 dogmap.UpdatedAt,
                 dogmap.IsDeleted,
                 dogmap.IsInStock
-        }) ;
+            });
         }
 
         public async Task<IActionResult> DeleteDogItem(int id)
@@ -117,32 +124,56 @@ namespace PetShop.Services.DogItemService
                 Images,
                 dogitem.CreateAt,
                 dogitem.UpdatedAt
-            }) ;
+            });
         }
 
-        public async Task<IActionResult> UpdateDogItem(int id, DogItemDto request)
+        public async Task<IActionResult> UpdateDogItem(int id, DogItemUpdateRequest request)
         {
             var dogitem =
-                await _context.DogItem.FirstOrDefaultAsync(x => x.DogItemId == id);
+                await _context.DogItem.Include(d => d.Species).FirstOrDefaultAsync(x => x.DogItemId == id);
+            _context.Entry(dogitem).State = EntityState.Modified;
             if (dogitem is null) return ResponseHelper.NotFound();
-            var existsdog =
-                await _context.DogItem.FirstOrDefaultAsync(e => e.DogName.ToLower() == request.DogName.ToLower() && e.DogItemId != id);
-            if (existsdog is not null) return ResponseHelper.BadRequest("Trùng tên chó rồi bạn ơi.");
+            var properties = typeof(DogItemUpdateRequest).GetProperties();
             try
             {
-                var specieid = _context.DogSpecies.FirstOrDefault(p => p.DogSpeciesName == request.SpeciesName);
-                if (dogitem is null) return ResponseHelper.NotFound();
-                _mapper.Map(request, dogitem);
-                dogitem.Images = JsonConvert.SerializeObject(request.Images);
-                dogitem.DogSpeciesId = (int)specieid.DogSpeciesId;
-                dogitem.UpdatedAt = DateTime.UtcNow;
-                dogitem.IsDeleted = request.IsDeleted;
-                dogitem.IsInStock = request.IsInStock;
-                await _context.SaveChangesAsync();
-            } catch (Exception)
+                foreach (var property in properties)
+                {
+                    var requestValue = property.GetValue(request);
+                    if (requestValue is not null)
+                    {
+                        if (property.Name == "DogName")
+                        {
+                            var existsdog =
+                            await _context.DogItem.FirstOrDefaultAsync(e => e.DogName.ToLower() == request.DogName.ToLower() && e.DogItemId != id);
+                            if (existsdog is not null) return ResponseHelper.BadRequest("Trùng tên chó rồi bạn ơi.");
+                            dogitem.DogName = request.DogName;
+                        }
+                        else if (property.Name == "SpeciesName")
+                        {
+                            var specieid = _context.DogSpecies.FirstOrDefault(p => p.DogSpeciesName == request.SpeciesName);
+                            if (specieid is not null)
+                            {
+                                dogitem.DogSpeciesId = (int)specieid.DogSpeciesId;
+                            }
+                        }
+                        else if (property.Name == "Images")
+                        {
+                            dogitem.Images = JsonConvert.SerializeObject(request.Images);
+                        }
+                        else
+                        {
+                            var dogitemProperty = typeof(DogItem).GetProperty(property.Name);
+                            dogitemProperty.SetValue(dogitem, requestValue);
+                        }
+                    }
+                }
+            }
+            catch
             {
                 return ResponseHelper.BadRequest("Không thể cập nhật. Vui lòng thử lại");
             }
+            dogitem.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
             var Images = JsonConvert.DeserializeObject<List<string>>(dogitem.Images);
             return ResponseHelper.Ok(new
             {
@@ -211,7 +242,7 @@ namespace PetShop.Services.DogItemService
                     dog.IsInStock = true;
                     await _context.SaveChangesAsync();
                 }
-                
+
                 object response = new
                 {
                     dog.DogItemId,
