@@ -9,7 +9,7 @@ namespace PetShop.Services.DogProductItemService
         Task<List<DogProductItemResponse>> GetAll();
         Task<DogProductItemResponse> Get(int id);
         Task<DogProductItemResponse> Add(DogProductItemDto dogProductItemDto);
-        Task<DogProductItemResponse?> Update(int id, DogProductItemDto dogProductItemDto);
+        Task<DogProductItemResponse?> Update(int id, DogProductItemDtoUpdate dogProductItemDto);
         Task<List<DogProductItemResponse>> Delete(int id);
 
     }

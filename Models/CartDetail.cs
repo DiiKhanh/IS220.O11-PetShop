@@ -12,8 +12,7 @@ namespace PetShop.Models
         public int? ProductItemId { get; set; }
         public int? DogItemId { get; set; }
         public short Quantity { get; set; }
-
-
+        public int Price { get; set; }
         public Cart Cart { get; set; } = null!;
 
         public ICollection<DogItem> dogItems  { get; set; } 
