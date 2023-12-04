@@ -19,14 +19,16 @@ namespace PetShop.Services.UserService
         private readonly IConfiguration _configuration;
         private readonly PetShopDbContext _context;
         private readonly IEmailService _emailService;
+        private readonly IHttpContextAccessor accessor;
 
-        public UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, PetShopDbContext context, IEmailService emailService)
+        public UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, PetShopDbContext context, IEmailService emailService, IHttpContextAccessor accessor)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             _configuration = configuration;
             _context = context;
             _emailService = emailService;
+            this.accessor = accessor;
         }
 
         public async Task<IActionResult> ChangePasswordAsync(ChangePasswordModel model, string userEmail)
@@ -302,5 +304,17 @@ namespace PetShop.Services.UserService
                 phoneNumber = user.PhoneNumber,
             });
         }
+
+        public async Task<string> loginUser()
+        {
+            var current = await userManager.GetUserAsync(accessor.HttpContext.User);
+
+            if (current == null)
+            {
+                throw new Exception("User not found.");
+            }
+            return current.Id;
+        }
+
     }
 }
