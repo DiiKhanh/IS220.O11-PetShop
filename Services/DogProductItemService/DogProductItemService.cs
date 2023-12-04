@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using NuGet.Protocol;
 using Org.BouncyCastle.Asn1.Ocsp;
 using PetShop.Data;
 using PetShop.DTOs;
@@ -44,7 +45,9 @@ namespace PetShop.Services.DogProductItemService
                 Images = images,
                 IsDeleted = false,
                 Quantity = dogProductItemDto.Quantity,
-                CreateAt = currentDateTime
+                CreateAt = currentDateTime,
+                UpdatedAt = currentDateTime,
+                IsInStock = true
             };
             DogProductItemResponse map = _mapper.Map<DogProductItemResponse>(newDogProductItem);
             map.Images = JsonConvert.DeserializeObject<string[]>(newDogProductItem.Images);
@@ -67,6 +70,7 @@ namespace PetShop.Services.DogProductItemService
                 newDogProductItem.IsDeleted = dogProductItemDto.IsDeleted;
                 newDogProductItem.Quantity = dogProductItemDto.Quantity;
                 newDogProductItem.UpdatedAt = currentDateTime;
+                newDogProductItem.IsInStock = dogProductItemDto.IsInStock;
                 await _context.SaveChangesAsync();
                 DogProductItemResponse response = _mapper.Map<DogProductItemResponse>(newDogProductItem);
                 response.Images = JsonConvert.DeserializeObject<string[]>(newDogProductItem.Images);
@@ -85,7 +89,7 @@ namespace PetShop.Services.DogProductItemService
                 dogProductItem.IsDeleted = true;
                 // _dbset.Remove(dogProductItem);
                 await _context.SaveChangesAsync();
-                return await GetAll();
+                return await GetAllAdmin();
             }
             return null;
         }
@@ -106,6 +110,20 @@ namespace PetShop.Services.DogProductItemService
         public async Task<List<DogProductItemResponse>> GetAll()
         {
             var items = await _context.DogProductItem.Where(d => d.IsDeleted != true).ToListAsync();
+            List<DogProductItemResponse> responselist = new List<DogProductItemResponse>();
+            items.ForEach(dogProductItem =>
+            {
+                DogProductItemResponse dogproducts = _mapper.Map<DogProductItemResponse>(dogProductItem);
+                dogproducts.Images = JsonConvert.DeserializeObject<string[]>(dogProductItem.Images);
+
+                responselist.Add(dogproducts);
+            });
+            return responselist;
+        }
+
+        public async Task<List<DogProductItemResponse>> GetAllAdmin()
+        {
+            var items = await _context.DogProductItem.ToListAsync();
             List<DogProductItemResponse> responselist = new List<DogProductItemResponse>();
             items.ForEach(dogProductItem =>
             {

@@ -105,5 +105,21 @@ namespace PetShop.Controllers
             }
 
         }
+
+        [HttpGet("get-all-dog-product-admin")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllAdmin()
+        {
+            try
+            {
+                var results = await _dogProductItemService.GetAllAdmin();
+                return ResponseHelper.Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.BadRequest(ex.Message);
+            }
+
+        }
     }
 }

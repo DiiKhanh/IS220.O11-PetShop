@@ -11,6 +11,7 @@ namespace PetShop.Services.DogProductItemService
         Task<DogProductItemResponse> Add(DogProductItemDto dogProductItemDto);
         Task<DogProductItemResponse?> Update(int id, DogProductItemDto dogProductItemDto);
         Task<List<DogProductItemResponse>> Delete(int id);
+        Task<List<DogProductItemResponse>> GetAllAdmin();
 
     }
 }

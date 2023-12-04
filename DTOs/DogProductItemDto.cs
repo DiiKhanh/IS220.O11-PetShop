@@ -29,5 +29,7 @@ namespace PetShop.DTOs
         public int Quantity { get; set; }
         public bool? IsInStock { get; set; }
         public bool? IsDeleted { get; set; }
+        public DateTime? CreateAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }
