@@ -19,6 +19,7 @@ namespace PetShop.Helpers
 
             CreateMap<DogItemResponse, DogItem>()
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => JsonConvert.SerializeObject(src.Images)));
+            CreateMap<Order, OrderDto>();
 
         }
     }

@@ -12,8 +12,8 @@ using PetShop.Data;
 namespace PetShop.Migrations
 {
     [DbContext(typeof(PetShopDbContext))]
-    [Migration("20231013203533_fix-cart")]
-    partial class fixcart
+    [Migration("20231211203911_fix-cart-order-ship")]
+    partial class fixcartordership
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -619,8 +619,7 @@ namespace PetShop.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.HasIndex("ShipInfoId")
-                        .IsUnique();
+                    b.HasIndex("ShipInfoId");
 
                     b.HasIndex("UserId");
 
@@ -638,17 +637,14 @@ namespace PetShop.Migrations
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DogItemId")
+                    b.Property<int?>("DogItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DogProductItemId")
+                    b.Property<int?>("DogProductItemId")
                         .HasColumnType("int");
 
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("ItemId")
-                        .HasColumnType("int");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
@@ -679,18 +675,20 @@ namespace PetShop.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("ShipInfoId"), 1L, 1);
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("District")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("ShipInfoId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ShipInfo");
                 });
@@ -808,8 +806,8 @@ namespace PetShop.Migrations
             modelBuilder.Entity("PetShop.Models.Order", b =>
                 {
                     b.HasOne("PetShop.Models.ShipInfo", "ShipInfo")
-                        .WithOne("order")
-                        .HasForeignKey("PetShop.Models.Order", "ShipInfoId")
+                        .WithMany("orders")
+                        .HasForeignKey("ShipInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -826,15 +824,11 @@ namespace PetShop.Migrations
                 {
                     b.HasOne("PetShop.Models.DogItem", "DogItem")
                         .WithMany("orderDetails")
-                        .HasForeignKey("DogItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DogItemId");
 
                     b.HasOne("PetShop.Models.DogProductItem", "DogProductItem")
                         .WithMany("orderDetails")
-                        .HasForeignKey("DogProductItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DogProductItemId");
 
                     b.HasOne("PetShop.Models.Order", "Order")
                         .WithMany("orderDetails")
@@ -847,9 +841,20 @@ namespace PetShop.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("PetShop.Models.ShipInfo", b =>
+                {
+                    b.HasOne("PetShop.Data.ApplicationUser", "user")
+                        .WithMany("ShipInfo")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("user");
+                });
+
             modelBuilder.Entity("PetShop.Data.ApplicationUser", b =>
                 {
                     b.Navigation("Orders");
+
+                    b.Navigation("ShipInfo");
                 });
 
             modelBuilder.Entity("PetShop.Models.Cart", b =>
@@ -881,7 +886,7 @@ namespace PetShop.Migrations
 
             modelBuilder.Entity("PetShop.Models.ShipInfo", b =>
                 {
-                    b.Navigation("order");
+                    b.Navigation("orders");
                 });
 #pragma warning restore 612, 618
         }

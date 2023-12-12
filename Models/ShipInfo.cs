@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using PetShop.Data;
 
 namespace PetShop.Models
 {
@@ -7,13 +8,15 @@ namespace PetShop.Models
     {
         [Key]
         public int? ShipInfoId { get; set; }
-        public string City { get; set; }
+        public string? UserId { get; set; }
+        public string? City { get; set; }
 
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
-        public string District { get; set; }
+        public string? District { get; set; }
 
-        public Order? order { get; set; }
+        public List<Order>? orders { get; set; }
+        public ApplicationUser? user { get; set; } = null!;
 
     }
 }

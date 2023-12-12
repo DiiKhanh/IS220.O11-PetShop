@@ -18,5 +18,6 @@ namespace PetShop.Data
         public DateTime? ResetTokenExpires { get; set; }
 
         public ICollection<Order> Orders { get; set; } = new List<Order>();
+        public ICollection<ShipInfo> ShipInfo { get; set; } = new List<ShipInfo>();
     }
 }

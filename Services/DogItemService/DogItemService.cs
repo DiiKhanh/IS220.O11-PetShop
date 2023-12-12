@@ -1,20 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NuGet.Protocol;
 using PetShop.Data;
 using PetShop.DTOs;
-using PetShop.DTOs.Wrapper;
 using PetShop.Helpers;
 using PetShop.Models;
-using System;
-using System.ComponentModel;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace PetShop.Services.DogItemService
 {

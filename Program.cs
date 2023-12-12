@@ -9,6 +9,7 @@ using PetShop.Services.CartService;
 using PetShop.Services.DogItemService;
 using PetShop.Services.DogProductItemService;
 using PetShop.Services.EmailService;
+using PetShop.Services.OrderService;
 using PetShop.Services.UriService;
 using PetShop.Services.UserService;
 
@@ -33,6 +34,7 @@ builder.Services.AddScoped<IDogItemService, DogItemService>();
 builder.Services.AddScoped<IDogProductItemService, DogProductItemService>();
 builder.Services.AddScoped<IDogSpeciesService, DogSpeciesService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddSingleton<IUriService>(o =>
 {
     var accessor = o.GetRequiredService<IHttpContextAccessor>();

@@ -9,7 +9,8 @@ namespace PetShop.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? OrderDetailId { get; set; }
         public int? OrderId { get; set; }
-        public int? ItemId { get; set; }
+        public int? DogProductItemId { get; set; }
+        public int? DogItemId { get; set; }
         public short Quantity { get; set; }
         public bool? IsDeleted { get; set; }
 
