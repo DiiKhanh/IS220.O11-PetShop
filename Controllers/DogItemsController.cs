@@ -9,11 +9,7 @@ using PetShop.DTOs;
 using PetShop.DTOs.Wrapper;
 using PetShop.Helpers;
 using PetShop.Services.DogItemService;
-<<<<<<< HEAD
-using System.Text.Json.Nodes;
-=======
 using PetShop.Services.UriService;
->>>>>>> 3cb2bee2ef48e6672679d62ae9d5ee7f59d87b50
 
 namespace PetShop.Controllers
 {
@@ -73,15 +69,11 @@ namespace PetShop.Controllers
         // PUT: api/DogItems/update-dog-item/5 update thông tin chú chó có id = {id}
         [HttpPut("update-dog-item/{id}")]
         [Authorize(Roles = "Admin")]
-<<<<<<< HEAD
         //public async Task<IActionResult> UpdateDogItem([FromRoute]int id, DogItemDto request)
         //{
         //    return await _dogitemservice.UpdateDogItem(id, request);
         //}
         public async Task<IActionResult> UpdateDogItem([FromRoute] int id,[FromBody] DogItemUpdateRequest request)
-=======
-        public async Task<IActionResult> UpdateDogItem([FromRoute]int id, DogItemDtoUpdate request)
->>>>>>> 3cb2bee2ef48e6672679d62ae9d5ee7f59d87b50
         {
             return await _dogitemservice.UpdateDogItem(id, request);
         }

@@ -44,15 +44,8 @@ namespace PetShop.Services.DogProductItemService
                 Description = dogProductItemDto.Description,
                 Images = images,
                 IsDeleted = false,
-<<<<<<< HEAD
                 Quantity = dogProductItemDto.Quantity,
-                CreateAt = currentDateTime,
-                UpdatedAt = currentDateTime,
-                IsInStock = true
-=======
-                Quantity = (int)dogProductItemDto.Quantity,
                 CreateAt = currentDateTime
->>>>>>> 3cb2bee2ef48e6672679d62ae9d5ee7f59d87b50
             };
             DogProductItemResponse map = _mapper.Map<DogProductItemResponse>(newDogProductItem);
             map.Images = JsonConvert.DeserializeObject<string[]>(newDogProductItem.Images);
@@ -67,17 +60,6 @@ namespace PetShop.Services.DogProductItemService
             if (newDogProductItem != null)
             {
                 DateTime currentDateTime = DateTime.Now;
-<<<<<<< HEAD
-                newDogProductItem.ItemName = dogProductItemDto.ItemName;
-                newDogProductItem.Price = dogProductItemDto.Price;
-                newDogProductItem.Category = dogProductItemDto.Category;
-                newDogProductItem.Description = dogProductItemDto.Description;
-                newDogProductItem.Images = images;
-                newDogProductItem.IsDeleted = dogProductItemDto.IsDeleted;
-                newDogProductItem.Quantity = dogProductItemDto.Quantity;
-                newDogProductItem.UpdatedAt = currentDateTime;
-                newDogProductItem.IsInStock = dogProductItemDto.IsInStock;
-=======
                 newDogProductItem.ItemName =     dogProductItemDto.ItemName    ?? newDogProductItem.ItemName     ;
                 if (dogProductItemDto.Price.HasValue) newDogProductItem.Price = (int)dogProductItemDto.Price;
                 newDogProductItem.Category =     dogProductItemDto.Category    ?? newDogProductItem.Category;
@@ -86,7 +68,6 @@ namespace PetShop.Services.DogProductItemService
                 newDogProductItem.IsDeleted =    dogProductItemDto.IsDeleted   ?? newDogProductItem.IsDeleted;
                 if (dogProductItemDto.Quantity.HasValue) newDogProductItem.Quantity = (int)dogProductItemDto.Quantity;
                 newDogProductItem.UpdatedAt =    currentDateTime;
->>>>>>> 3cb2bee2ef48e6672679d62ae9d5ee7f59d87b50
                 await _context.SaveChangesAsync();
                 DogProductItemResponse response = _mapper.Map<DogProductItemResponse>(newDogProductItem);
                 response.Images = JsonConvert.DeserializeObject<string[]>(newDogProductItem.Images);
@@ -137,7 +118,6 @@ namespace PetShop.Services.DogProductItemService
             return responselist;
         }
 
-<<<<<<< HEAD
         public async Task<List<DogProductItemResponse>> GetAllAdmin()
         {
             var items = await _context.DogProductItem.ToListAsync();
@@ -151,7 +131,5 @@ namespace PetShop.Services.DogProductItemService
             });
             return responselist;
         }
-=======
->>>>>>> 3cb2bee2ef48e6672679d62ae9d5ee7f59d87b50
     }
 }
