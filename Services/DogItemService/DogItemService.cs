@@ -116,7 +116,9 @@ namespace PetShop.Services.DogItemService
                 dogitem.Description,
                 Images,
                 dogitem.CreateAt,
-                dogitem.UpdatedAt
+                dogitem.UpdatedAt,
+                dogitem.IsInStock,
+                dogitem.IsDeleted
             }) ;
         }
 
