@@ -13,5 +13,6 @@ namespace PetShop.Services.UserService
         Task<IActionResult> ResetPasswordAsync(ResetPasswordModel model);
         Task<IActionResult> ChangePasswordAsync(ChangePasswordModel model, string userEmail);
         Task<IActionResult> GetInfo(string userEmail);
+        Task<IActionResult> GetAll();
     }
 }
