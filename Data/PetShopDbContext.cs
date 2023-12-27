@@ -18,6 +18,10 @@ namespace PetShop.Data
         public DbSet<Order> Order { get; set; }
         public DbSet<OrderDetail> OrderDetail { get; set; }
         public DbSet<ShipInfo> ShipInfo { get; set; }
+        public DbSet<Checkout> Checkout {  get; set; }
+        public DbSet<Voucher> Voucher { get; set; }
+        public DbSet<Appointment> Appointment { get; set; }
+        public DbSet<Comment> Comment { get; set; }
         public PetShopDbContext(DbContextOptions<PetShopDbContext> options) : base(options)
         {
 
@@ -30,6 +34,11 @@ namespace PetShop.Data
                 o.HasIndex(u => u.PhoneNumber).IsUnique();
             }
             );
+
+            builder.Entity<Voucher>(o =>
+            {
+                o.HasIndex(u => u.Code).IsUnique();
+            });
 
             builder.Entity<DogSpecies>().HasData(
                 new DogSpecies {DogSpeciesId = 1 ,DogSpeciesName = "Golden Retriever"},

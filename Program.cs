@@ -5,10 +5,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PetShop.Data;
+using PetShop.Services.AppointmentService;
+using PetShop.Services.CheckoutService;
+using PetShop.Services.CommentService;
 using PetShop.Services.DogItemService;
 using PetShop.Services.DogProductItemService;
 using PetShop.Services.EmailService;
 using PetShop.Services.UserService;
+using PetShop.Services.VoucherService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +34,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDogItemService, DogItemService>();
 builder.Services.AddScoped<IDogProductItemService, DogProductItemService>();
 builder.Services.AddScoped<IDogSpeciesService, DogSpeciesService>();
+builder.Services.AddScoped<ICheckoutService, CheckoutService>();
+builder.Services.AddScoped<IVoucherService, VoucherService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>  

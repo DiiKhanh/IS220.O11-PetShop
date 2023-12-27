@@ -20,5 +20,18 @@
         "EmailHost": "smtp.gmail.com",
         "EmailUsername": "sneaker697.store@gmail.com",
         "EmailPassword": "knobyfgbwowayyze"
-    }
+    },
+    "Vnpay": {
+        "TmnCode": "",
+        "HashSecret": "",
+        "BaseUrl": "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
+        "Command": "pay",
+        "CurrCode": "VND",
+        "Version": "2.1.0",
+        "Locale": "vn"
+    },
+    "PaymentCallBack": {
+        "ReturnUrl": "http://localhost:5173/checkout/success"
+    },
+    "TimeZoneId": "SE Asia Standard Time"
 }
