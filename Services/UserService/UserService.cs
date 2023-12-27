@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using PetShop.Data;
 using PetShop.Helpers;
 using PetShop.Models;
@@ -301,6 +302,30 @@ namespace PetShop.Services.UserService
                 lastName = user.LastName,
                 phoneNumber = user.PhoneNumber,
             });
+        }
+
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await _context.Users.ToListAsync();
+            if (users is null) return ResponseHelper.NotFound();
+            List<object> responselist = new List<object>();
+            users.ForEach(user =>
+            {
+                
+
+                object response = new
+                {
+                    user.UserName,
+                    user.Email,
+                    user.FirstName,
+                    user.LastName,
+                    user.PhoneNumber,
+                    user.CreatedAt,
+                    user.Id
+                };
+                responselist.Add(response);
+            });
+            return ResponseHelper.Ok(responselist);
         }
     }
 }

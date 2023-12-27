@@ -114,5 +114,12 @@ namespace PetShop.Controllers
             return ResponseHelper.Error();
         }
 
+        [Authorize(Roles ="Admin")]
+        [HttpGet("get-all")]
+        public async Task<IActionResult> GetAll()
+        {
+            return await _userService.GetAll();
+        }
+
     }
 }
