@@ -65,12 +65,17 @@ namespace PetShop.Services.CheckoutService
                         return ResponseHelper.BadRequest("Sản phẩm đã hết vui lòng kiểm tra lại!");
                     }
 
-                    productItem.Quantity = item.stock - item.quantity;
+                    var temp = productItem.Quantity - item.quantity;
 
-                    if (item.stock - item.quantity == 0)
+                    if (temp <= 0)
                     {
                         productItem.IsInStock = false;
+                        if (productItem.IsInStock == false)
+                        {
+                            return ResponseHelper.BadRequest("Sản phẩm đã hết vui lòng kiểm tra lại!");
+                        }
                     }
+                    productItem.Quantity = item.stock - item.quantity;
 
                     _context.SaveChanges();
                 }

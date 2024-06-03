@@ -11,5 +11,6 @@ namespace PetShop.DTOs
         public string Start_date { get; set; }
         public string End_date { get; set; }
         public int Max_usage { get; set; }
+        public bool? IsDeleted { get; set; }
     }
 }

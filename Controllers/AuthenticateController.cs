@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetShop.DTOs;
 using PetShop.Helpers;
 using PetShop.Models;
 using PetShop.Services.UserService;
@@ -119,6 +120,13 @@ namespace PetShop.Controllers
         public async Task<IActionResult> GetAll()
         {
             return await _userService.GetAll();
+        }
+
+        [Authorize]
+        [HttpPost("edit-info")]
+        public async Task<IActionResult> EditInfo(UserDto request)
+        {
+            return await _userService.EditInfo(request);
         }
 
     }

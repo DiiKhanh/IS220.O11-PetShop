@@ -249,6 +249,9 @@ namespace PetShop.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("AvatarUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -579,6 +582,10 @@ namespace PetShop.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -710,7 +717,99 @@ namespace PetShop.Migrations
                         {
                             DogSpeciesId = 10,
                             DogSpeciesName = "Shiba"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 11,
+                            DogSpeciesName = "Siamese"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 12,
+                            DogSpeciesName = "Maine Coon"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 13,
+                            DogSpeciesName = "Persian"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 14,
+                            DogSpeciesName = "Bengal"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 15,
+                            DogSpeciesName = "Sphynx"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 16,
+                            DogSpeciesName = "Munchkin"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 17,
+                            DogSpeciesName = "Scottish Fold"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 18,
+                            DogSpeciesName = "Đồ cho chó"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 19,
+                            DogSpeciesName = "Đồ cho mèo"
                         });
+                });
+
+            modelBuilder.Entity("PetShop.Models.Goods", b =>
+                {
+                    b.Property<int?>("GoodsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("GoodsId"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Supplier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Total")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("GoodsId");
+
+                    b.ToTable("Goods");
                 });
 
             modelBuilder.Entity("PetShop.Models.Invoice", b =>

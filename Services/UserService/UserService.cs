@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using PetShop.Data;
+using PetShop.DTOs;
 using PetShop.Helpers;
 using PetShop.Models;
 using PetShop.Services.EmailService;
@@ -77,7 +77,7 @@ namespace PetShop.Services.UserService
                 {
                     email,
                     message = "You may now reset your password."
-            });
+                });
             }
             catch (Exception e)
             {
@@ -92,7 +92,7 @@ namespace PetShop.Services.UserService
             {
                 if (user.VerifiedAt is null)
                 {
-                    return ResponseHelper.BadRequest("Email not verified!");
+                    return ResponseHelper.BadRequest("Email not verified! Please check email to verify");
                 }
 
                 var userRoles = await userManager.GetRolesAsync(user);
@@ -104,17 +104,24 @@ namespace PetShop.Services.UserService
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email)
                 };
-
                 foreach (var userRole in userRoles)
                 {
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
                 var token = GetToken(authClaims);
 
-                var data = new { token = new JwtSecurityTokenHandler().WriteToken(token), expiration = token.ValidTo, id = user.Id, email = user.Email, username = user.UserName,
+                var data = new
+                {
+                    token = new JwtSecurityTokenHandler().WriteToken(token),
+                    expiration = token.ValidTo,
+                    id = user.Id,
+                    email = user.Email,
+                    username = user.UserName,
                     firstName = user.FirstName,
                     lastName = user.LastName,
                     phoneNumber = user.PhoneNumber,
+                    role = userRoles,
+                    avatarUrl = user.AvatarUrl
                 };
                 return ResponseHelper.Ok(data);
             }
@@ -160,7 +167,7 @@ namespace PetShop.Services.UserService
 
         public async Task<IActionResult> RegisterAdminAsync(RegisterModel model)
         {
-            var userExists = await userManager.FindByEmailAsync(model.Email) ?? await userManager.FindByNameAsync(model.Username);
+            var userExists = await userManager.FindByEmailAsync(model.Email) ?? await userManager.FindByNameAsync(model.Username) ?? await userManager.FindByNameAsync(model.PhoneNumber);
             if (userExists != null)
                 return ResponseHelper.BadRequest("User already exists!");
 
@@ -176,13 +183,13 @@ namespace PetShop.Services.UserService
                 VerificationToken = CreateRandomToken()
             };
             var result = await userManager.CreateAsync(user, model.Password);
-            
+
             if (!result.Succeeded)
                 return ResponseHelper.BadRequest("User creation failed! Please check user details and try again.");
 
             if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
                 await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
-           
+
 
             if (await roleManager.RoleExistsAsync(UserRoles.Admin))
             {
@@ -233,6 +240,11 @@ namespace PetShop.Services.UserService
                 return ResponseHelper.BadRequest("Token not verified!");
             }
 
+            if (user.VerifiedAt != null)
+            {
+                return ResponseHelper.BadRequest("Your account has already been verified!");
+            }
+
             user.VerifiedAt = DateTime.Now;
             await _context.SaveChangesAsync();
 
@@ -280,9 +292,10 @@ namespace PetShop.Services.UserService
                         <p><strong>{user.VerificationToken}</strong></p>
                         <p>Vui lòng sử dụng mã này để xác nhận địa chỉ email của bạn. Sau khi xác nhận, bạn sẽ có quyền truy cập vào tài khoản của mình.</p>
                         <p>Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.</p>
+                        <p>Link xác nhận: <a href=""http://localhost:5173/verify"">Xác nhận email</a></p>
                         <p>Trân trọng,</p>
                         <p>PetShop@2023</p>"
-        };
+            };
 
             return mail;
         }
@@ -290,6 +303,7 @@ namespace PetShop.Services.UserService
         public async Task<IActionResult> GetInfo(string userEmail)
         {
             var user = await userManager.FindByEmailAsync(userEmail);
+            var userRoles = await userManager.GetRolesAsync(user);
             if (user == null)
             {
                 return ResponseHelper.Unauthorized();
@@ -301,6 +315,9 @@ namespace PetShop.Services.UserService
                 firstName = user.FirstName,
                 lastName = user.LastName,
                 phoneNumber = user.PhoneNumber,
+                role = userRoles,
+                avatarUrl = user.AvatarUrl,
+                user.Id,
             });
         }
 
@@ -311,8 +328,8 @@ namespace PetShop.Services.UserService
             List<object> responselist = new List<object>();
             users.ForEach(user =>
             {
-                
 
+                var userRoles = userManager.GetRolesAsync(user);
                 object response = new
                 {
                     user.UserName,
@@ -321,11 +338,38 @@ namespace PetShop.Services.UserService
                     user.LastName,
                     user.PhoneNumber,
                     user.CreatedAt,
-                    user.Id
+                    user.Id,
+                    role = userRoles.Result,
+                    avatarUrl = user.AvatarUrl
                 };
                 responselist.Add(response);
             });
             return ResponseHelper.Ok(responselist);
+        }
+        public async Task<IActionResult> EditInfo(UserDto request)
+        {
+            var user = await userManager.FindByIdAsync(request.Id);
+            if (user == null)
+            {
+                return ResponseHelper.Unauthorized();
+            }
+            var userRoles = await userManager.GetRolesAsync(user);
+            user.UpdatedAt = DateTime.UtcNow;
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.PhoneNumber = request.PhoneNumber;
+            user.AvatarUrl = request.AvatarUrl;
+            await _context.SaveChangesAsync();
+            return ResponseHelper.Ok(new
+            {
+                username = user.UserName,
+                email = user.Email,
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                phoneNumber = user.PhoneNumber,
+                role = userRoles,
+                avatarUrl = user.AvatarUrl
+            });
         }
     }
 }

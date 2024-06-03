@@ -12,8 +12,8 @@ using PetShop.Data;
 namespace PetShop.Migrations
 {
     [DbContext(typeof(PetShopDbContext))]
-    [Migration("20231225075519_add-checkout")]
-    partial class addcheckout
+    [Migration("20240518181157_typespecial")]
+    partial class typespecial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -251,6 +251,9 @@ namespace PetShop.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("AvatarUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -330,6 +333,67 @@ namespace PetShop.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("PetShop.Models.Appointment", b =>
+                {
+                    b.Property<int?>("Appointment_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Appointment_id"), 1L, 1);
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Dog_item_id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Hour")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Is_cancel")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Phone_number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Result")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Service")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("User_id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("User_name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Appointment_id");
+
+                    b.ToTable("Appointment");
                 });
 
             modelBuilder.Entity("PetShop.Models.Cart", b =>
@@ -426,6 +490,47 @@ namespace PetShop.Migrations
                     b.ToTable("Checkout");
                 });
 
+            modelBuilder.Entity("PetShop.Models.Comment", b =>
+                {
+                    b.Property<int?>("Comment_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Comment_id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAccept")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Product_id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("User_id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Comment_id");
+
+                    b.ToTable("Comment");
+                });
+
             modelBuilder.Entity("PetShop.Models.DogItem", b =>
                 {
                     b.Property<int?>("DogItemId")
@@ -476,6 +581,10 @@ namespace PetShop.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Sex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -610,6 +719,51 @@ namespace PetShop.Migrations
                         {
                             DogSpeciesId = 10,
                             DogSpeciesName = "Shiba"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 11,
+                            DogSpeciesName = "Siamese"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 12,
+                            DogSpeciesName = "Maine Coon"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 13,
+                            DogSpeciesName = "Persian"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 14,
+                            DogSpeciesName = "Bengal"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 15,
+                            DogSpeciesName = "Sphynx"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 16,
+                            DogSpeciesName = "Munchkin"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 17,
+                            DogSpeciesName = "Scottish Fold"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 18,
+                            DogSpeciesName = "Đồ cho chó"
+                        },
+                        new
+                        {
+                            DogSpeciesId = 19,
+                            DogSpeciesName = "Đồ cho mèo"
                         });
                 });
 
@@ -744,6 +898,56 @@ namespace PetShop.Migrations
                     b.HasKey("ShipInfoId");
 
                     b.ToTable("ShipInfo");
+                });
+
+            modelBuilder.Entity("PetShop.Models.Voucher", b =>
+                {
+                    b.Property<int?>("Voucher_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Voucher_id"), 1L, 1);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Current_usage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Discount_type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Discount_value")
+                        .HasColumnType("int");
+
+                    b.Property<string>("End_date")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Max_usage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Start_date")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Voucher_id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Voucher");
                 });
 
             modelBuilder.Entity("CartDetailDogItem", b =>

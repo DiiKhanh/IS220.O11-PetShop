@@ -31,6 +31,13 @@ namespace PetShop.Controllers
         {
             return await _dogitemservice.GetAllDogItems();
         }
+        // Lay danh sach chó
+        [HttpGet]
+        [Route("get-all/{type}")]
+        public async Task<IActionResult> GetAllDog([FromRoute] string type)
+        {
+            return await _dogitemservice.GetAllDog(type);
+        }
 
         // GET: api/DogItems/get-dog/5 Lay thong tin chu cho có id = {id}
         [HttpGet("get-dog/{id}")]

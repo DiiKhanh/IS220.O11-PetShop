@@ -13,6 +13,7 @@ namespace PetShop.Models
         public string Color { get; set; }
         public string Sex { get; set; }
         public int Age { get; set; }
+        public string Type { get; set; }
         public string Origin { get; set; }
         public string HealthStatus { get; set; }
         public string Description { get; set; }

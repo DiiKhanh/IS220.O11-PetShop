@@ -44,7 +44,8 @@ namespace PetShop.Services.DogItemService
                     dog.CreateAt,
                     dog.UpdatedAt,
                     dog.IsInStock,
-                    dog.IsDeleted
+                    dog.IsDeleted,
+                    dog.Type
                 };
                 responselist.Add(response);
             });
@@ -54,7 +55,7 @@ namespace PetShop.Services.DogItemService
         {
             var existsdog =
                 await _context.DogItem.FirstOrDefaultAsync(e => e.DogName.ToLower().Trim() == request.DogName.ToLower().Trim());
-            if (existsdog is not null) return ResponseHelper.BadRequest("Trùng tên chó rồi bạn ơi.");
+            if (existsdog is not null) return ResponseHelper.BadRequest("Trùng tên thú cưng!");
             var specieid = _context.DogSpecies.FirstOrDefault(p => p.DogSpeciesName == request.SpeciesName);
             var dogmap = _mapper.Map<DogItem>(request);
             dogmap.DogSpeciesId = (int)specieid.DogSpeciesId;
@@ -63,6 +64,7 @@ namespace PetShop.Services.DogItemService
             dogmap.UpdatedAt = DateTime.UtcNow;
             dogmap.IsDeleted = false;
             dogmap.IsInStock = true;
+            dogmap.Type = request.Type;
             await _context.DogItem.AddAsync(dogmap);
             await _context.SaveChangesAsync();
             var Images = JsonConvert.DeserializeObject<List<string>>(dogmap.Images);
@@ -82,7 +84,8 @@ namespace PetShop.Services.DogItemService
                 dogmap.CreateAt,
                 dogmap.UpdatedAt,
                 dogmap.IsDeleted,
-                dogmap.IsInStock
+                dogmap.IsInStock,
+                dogmap.Type
         }) ;
         }
 
@@ -118,7 +121,8 @@ namespace PetShop.Services.DogItemService
                 dogitem.CreateAt,
                 dogitem.UpdatedAt,
                 dogitem.IsInStock,
-                dogitem.IsDeleted
+                dogitem.IsDeleted,
+                dogitem.Type
             }) ;
         }
 
@@ -162,7 +166,8 @@ namespace PetShop.Services.DogItemService
                 dogitem.CreateAt,
                 dogitem.UpdatedAt,
                 dogitem.IsInStock,
-                dogitem.IsDeleted
+                dogitem.IsDeleted,
+                dogitem.Type
             }
             );
         }
@@ -189,7 +194,8 @@ namespace PetShop.Services.DogItemService
                     dog.Description,
                     Images = images,
                     dog.CreateAt,
-                    dog.UpdatedAt
+                    dog.UpdatedAt,
+                    dog.Type
                 };
                 responselist.Add(response);
             });
@@ -231,7 +237,8 @@ namespace PetShop.Services.DogItemService
                     dog.CreateAt,
                     dog.UpdatedAt,
                     dog.IsInStock,
-                    dog.IsDeleted
+                    dog.IsDeleted,
+                    dog.Type
                 };
                 responselist.Add(response);
             });
@@ -259,8 +266,40 @@ namespace PetShop.Services.DogItemService
                 dogitem.CreateAt,
                 dogitem.UpdatedAt,
                 dogitem.IsDeleted,
-                dogitem.IsInStock
+                dogitem.IsInStock,
+                dogitem.Type
             });
+        }
+
+        public async Task<IActionResult> GetAllDog(string type)
+        {
+            var dogitems = await _context.DogItem.Include(d => d.Species).Where(d => d.IsDeleted != true && type==d.Type).ToListAsync();
+            List<object> responselist = new List<object>();
+            dogitems.ForEach(dog =>
+            {
+                var images = JsonConvert.DeserializeObject<string[]>(dog.Images);
+                object response = new
+                {
+                    dog.DogItemId,
+                    dog.DogName,
+                    dog.Species.DogSpeciesName,
+                    dog.DogSpeciesId,
+                    dog.Price,
+                    dog.Color,
+                    dog.Sex,
+                    dog.Age,
+                    dog.Origin,
+                    dog.HealthStatus,
+                    dog.Description,
+                    Images = images,
+                    dog.CreateAt,
+                    dog.UpdatedAt,
+                    dog.IsInStock,
+                    dog.IsDeleted
+                };
+                responselist.Add(response);
+            });
+            return ResponseHelper.Ok(responselist);
         }
     }
 }

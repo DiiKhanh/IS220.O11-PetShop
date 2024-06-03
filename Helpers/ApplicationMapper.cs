@@ -25,6 +25,9 @@ namespace PetShop.Helpers
 
             CreateMap<CommentDto, Comment>();
             CreateMap<Comment, CommentDto>();
+
+            CreateMap<GoodsDto, Goods>();
+            CreateMap<Goods, GoodsDto>();
         }
     }
 }

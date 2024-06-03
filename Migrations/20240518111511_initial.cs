@@ -5,10 +5,35 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PetShop.Migrations
 {
-    public partial class createStore : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Appointment",
+                columns: table => new
+                {
+                    Appointment_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    User_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dog_item_id = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Hour = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone_number = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    User_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Service = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Result = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Is_cancel = table.Column<bool>(type: "bit", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointment", x => x.Appointment_id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -34,6 +59,7 @@ namespace PetShop.Migrations
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     VerificationToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     VerifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PasswordResetToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ResetTokenExpires = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -66,6 +92,49 @@ namespace PetShop.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cart", x => x.CartId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Checkout",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    User_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Total = table.Column<int>(type: "int", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Payment = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Checkout", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comment",
+                columns: table => new
+                {
+                    Comment_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    User_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Product_id = table.Column<int>(type: "int", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsAccept = table.Column<bool>(type: "bit", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comment", x => x.Comment_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -144,6 +213,28 @@ namespace PetShop.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShipInfo", x => x.ShipInfoId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Voucher",
+                columns: table => new
+                {
+                    Voucher_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discount_type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Discount_value = table.Column<int>(type: "int", nullable: false),
+                    Start_date = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    End_date = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Max_usage = table.Column<int>(type: "int", nullable: false),
+                    Current_usage = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Voucher", x => x.Voucher_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -555,10 +646,19 @@ namespace PetShop.Migrations
                 name: "IX_OrderDetail_OrderId",
                 table: "OrderDetail",
                 column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Voucher_Code",
+                table: "Voucher",
+                column: "Code",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Appointment");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -581,6 +681,12 @@ namespace PetShop.Migrations
                 name: "CartDetailDogProductItem");
 
             migrationBuilder.DropTable(
+                name: "Checkout");
+
+            migrationBuilder.DropTable(
+                name: "Comment");
+
+            migrationBuilder.DropTable(
                 name: "IdentityUser");
 
             migrationBuilder.DropTable(
@@ -588,6 +694,9 @@ namespace PetShop.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderDetail");
+
+            migrationBuilder.DropTable(
+                name: "Voucher");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

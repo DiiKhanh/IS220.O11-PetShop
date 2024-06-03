@@ -22,6 +22,7 @@ namespace PetShop.Data
         public DbSet<Voucher> Voucher { get; set; }
         public DbSet<Appointment> Appointment { get; set; }
         public DbSet<Comment> Comment { get; set; }
+        public DbSet<Goods> Goods { get; set; }
         public PetShopDbContext(DbContextOptions<PetShopDbContext> options) : base(options)
         {
 
@@ -50,7 +51,16 @@ namespace PetShop.Data
                 new DogSpecies {DogSpeciesId = 7 ,DogSpeciesName = "Lạp Xưởng"},
                 new DogSpecies {DogSpeciesId = 8 ,DogSpeciesName = "Poodle"},
                 new DogSpecies {DogSpeciesId = 9 ,DogSpeciesName = "Chihuahua"},
-                new DogSpecies {DogSpeciesId = 10,DogSpeciesName = "Shiba" }
+                new DogSpecies {DogSpeciesId = 10,DogSpeciesName = "Shiba" },
+                new DogSpecies { DogSpeciesId = 11, DogSpeciesName = "Siamese" },
+                new DogSpecies { DogSpeciesId = 12, DogSpeciesName = "Maine Coon" },
+                new DogSpecies { DogSpeciesId = 13, DogSpeciesName = "Persian" },
+                new DogSpecies { DogSpeciesId = 14, DogSpeciesName = "Bengal" },
+                new DogSpecies { DogSpeciesId = 15, DogSpeciesName = "Sphynx" },
+                new DogSpecies { DogSpeciesId = 16, DogSpeciesName = "Munchkin" },
+                new DogSpecies { DogSpeciesId = 17, DogSpeciesName = "Scottish Fold" },
+                new DogSpecies { DogSpeciesId = 18, DogSpeciesName = "Đồ cho chó" },
+                new DogSpecies { DogSpeciesId = 19, DogSpeciesName = "Đồ cho mèo" }
 
             );
 

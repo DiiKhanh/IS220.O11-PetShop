@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PetShop.DTOs;
 using PetShop.Models;
 
 namespace PetShop.Services.UserService
@@ -14,5 +15,7 @@ namespace PetShop.Services.UserService
         Task<IActionResult> ChangePasswordAsync(ChangePasswordModel model, string userEmail);
         Task<IActionResult> GetInfo(string userEmail);
         Task<IActionResult> GetAll();
+
+        Task<IActionResult> EditInfo(UserDto request);
     }
 }
