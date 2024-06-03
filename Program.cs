@@ -47,7 +47,7 @@ policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
 // entity framework
 builder.Services.AddDbContext<PetShopDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PetShop"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PetShop123"));
 });
 
 // for identity

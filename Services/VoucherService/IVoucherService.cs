@@ -10,5 +10,7 @@ namespace PetShop.Services.VoucherService
         Task<IActionResult> Delete(int id);
         Task<IActionResult> GetCode(string code);
         Task<IActionResult> List();
+        Task<IActionResult> GetCodeAdmin(int id);
+        Task<IActionResult> Edit(int id, VoucherDto request);
     }
 }

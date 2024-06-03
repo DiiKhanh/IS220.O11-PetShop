@@ -43,6 +43,20 @@ namespace PetShop.Controllers
             return await _voucherService.GetCode(code);
         }
 
+        [HttpGet("get-admin/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetCodeAdmin([FromRoute] int id)
+        {
+            return await _voucherService.GetCodeAdmin(id);
+        }
+
+        [HttpPost("edit/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit([FromRoute] int id, VoucherDto request)
+        {
+            return await _voucherService.Edit(id, request);
+        }
+
         [HttpGet("list")]
         public async Task<IActionResult> List()
         {

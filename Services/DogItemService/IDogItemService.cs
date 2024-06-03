@@ -14,5 +14,6 @@ namespace PetShop.Services.DogItemService
         Task<IActionResult> GetDogBySpecies(int specieid);
         Task<IActionResult> GetAllDogItemsAdmin();
         Task<IActionResult> GetDogItemAdmin(int id);
+        Task<IActionResult> GetAllDog(string type);
     }
 }

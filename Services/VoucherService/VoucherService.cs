@@ -67,6 +67,7 @@ namespace PetShop.Services.VoucherService
             if (voucher is null || voucher.IsDeleted == true) return ResponseHelper.NotFound();
             //_context.DogItem.Remove(dogitem);
             voucher.IsDeleted = true;
+            voucher.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
             return ResponseHelper.Ok(new
             {
@@ -123,6 +124,59 @@ namespace PetShop.Services.VoucherService
                 responselist.Add(response);
             });
             return ResponseHelper.Ok(responselist);
+        }
+
+        public async Task<IActionResult> GetCodeAdmin(int id)
+        {
+            var voucher = _context.Voucher.FirstOrDefault(x => x.Voucher_id == id);
+            if (voucher is null) return ResponseHelper.NotFound();
+            return ResponseHelper.Ok(new
+            {
+                voucher.IsDeleted,
+                voucher.Current_usage,
+                voucher.Max_usage,
+                voucher.Code,
+                voucher.Voucher_id,
+                voucher.Start_date,
+                voucher.End_date,
+                voucher.Discount_type,
+                voucher.Discount_value,
+                voucher.CreateAt,
+                voucher.UpdatedAt
+            });
+        }
+
+        public async Task<IActionResult> Edit(int id, VoucherDto request)
+        {
+
+            var voucher = _context.Voucher.FirstOrDefault(x => x.Voucher_id == id);
+            if (voucher is null) return ResponseHelper.NotFound();
+
+            voucher.UpdatedAt = DateTime.UtcNow;
+            voucher.Code = request.Code;
+            voucher.Start_date = request.Start_date;
+            voucher.End_date = request.End_date;
+            voucher.Max_usage = request.Max_usage;
+            voucher.Discount_value = request.Discount_value;
+            voucher.Discount_type = request.Discount_type;
+            voucher.IsDeleted = request.IsDeleted;
+            await _context.SaveChangesAsync();
+
+            return ResponseHelper.Ok(new
+            {
+                status = 200,
+                voucher.IsDeleted,
+                voucher.Current_usage,
+                voucher.Max_usage,
+                voucher.Code,
+                voucher.Voucher_id,
+                voucher.Start_date,
+                voucher.End_date,
+                voucher.Discount_type,
+                voucher.Discount_value,
+                voucher.CreateAt,
+                voucher.UpdatedAt
+            });
         }
     }
 }
