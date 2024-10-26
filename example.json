@@ -1,5 +1,4 @@
-﻿// tao file appsettings.json roi pass nay vo
-
+﻿// create file appsettings.json to apply config
 {
     "ConnectionStrings": {
         "PetShop": "Server=.; Database=PetShop; Integrated Security=True; ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
@@ -18,8 +17,8 @@
     },
     "EmailSettings": {
         "EmailHost": "smtp.gmail.com",
-        "EmailUsername": "sneaker697.store@gmail.com",
-        "EmailPassword": "knobyfgbwowayyze"
+        "EmailUsername": "example@gmail.com",
+        "EmailPassword": "example"
     },
     "Vnpay": {
         "TmnCode": "",
